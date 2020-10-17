@@ -15,5 +15,17 @@ parseInt ('i':t) =
     in
             case postfix of
                 ('e':r) -> (read prefix, r)
-                _ -> error "Invalid Integer"
-parseInt _ = error "Not integer"
+                _ -> error "Invalid integer"
+parseInt _ = error "Not an integer"
+
+parseString :: String -> (String, String)
+parseString str =
+    let
+       strLen = 
+            L.takeWhile C.isDigit str
+       postfix = L.drop (length strLen) str
+    in
+       case postfix of
+           (':':r) -> (L.take (read strLen) r, L.drop (read strLen) r)
+           _ -> error "Invalid string"
+parseString _ = error "Not a string"
