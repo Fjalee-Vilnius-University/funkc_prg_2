@@ -29,3 +29,14 @@ parseString str =
            (':':r) -> (L.take (read strLen) r, L.drop (read strLen) r)
            _ -> error "Invalid string"
 parseString _ = error "Not a string"
+
+parseMap :: String -> (String, String)
+parseMap ('d':r) = 
+    let
+       (name, value) = parseString r
+    in
+        case name of
+           "prev" -> parseString r
+           "last" -> parseString r
+           _ -> error "Not Map"
+parseMap _ = error "not Map"
