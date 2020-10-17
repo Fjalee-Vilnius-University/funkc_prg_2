@@ -1,13 +1,12 @@
 module Task2Message
 where
 
---http://tic-tac-toe.homedir.eu/arbitrary/2/9
 -- ┌       ┐
 -- │ O X X │
--- │ X X O │
--- │ X O O │
+-- │ O X O │
+-- │ O   X │
 -- └       ┘
--- seed: 7631977681515652598
+-- seed: -2562625625236972899
 -- encoding: Ben
 -- list entry: ARR
 -- convert to: LIL
@@ -19,15 +18,15 @@ size :: Int
 size = 3
 
 message :: String
-message = "d4:prevd4:prevd4:lastd2:ysli1ee2:vsl1:Xe2:xsli0eee4:prevd4:prevd4:prevd4:prevd4:prevd4:prevd4:lastd2:ysli0ee2:vsl1:Xe2:xsli1eeee4:lastd2:ysli0ee2:vsl1:Oe2:xsli0eeee4:l\"astd2:ysli0ee2:vsl1:Xe2:xsli2eeee4:lastd2:ysli1ee2:vsl1:Oe2:xsli2eeee4:lastd2:ysli2ee2:vsl1:Xe2:xsli0eeee4:lastd2:ysli2ee2:vsl1:Oe2:xsli1eeeee4:lastd2:ysli2ee2:vsl1:Oe2:xsli2eeee4:lastd2:ysli1ee2:vsl1:Xe2:xsli1eeee"
+message = "d4:lastd2:ysli2ee2:vsl1:Oe2:xsli0eee4:prevd4:prevd4:prevd4:lastd2:ysli0ee2:vsl1:Xe2:xsli1eee4:prevd4:prevd4:prevd4:prevd4:lastd2:ysli1ee2:vsl1:Xe2:xsli1eeee4:lastd2:ysli1ee2:vsl1:Oe2:xsli2eeee4:lastd2:ysli0ee2:vsl1:Xe2:xsli2eeee4:lastd2:ysli1ee2:vsl1:Oe2:xsli0eeeee4:lastd2:ysli0ee2:vsl1:Oe2:xsli0eeee4:lastd2:ysli2ee2:vsl1:Xe2:xsli2eeeee"
 
 message' :: String
-message' = "d4:prevd4:prevd4:lastd2:ysli1ee2:vsl1:Xe2:xsli0eee4:prevd4:prevd4:prevd4:prevd4:prevd4:prevd4:lastd2:ysli0ee2:vsl1:Xe2:xsli1eeee4:lastd2:ysli0ee2:vsl1:Oe2:xsli0eeee4:lastd2:ysli0ee2:vsl1:Xe2:xsli2eeee4:lastd2:ysli1ee2:vsl1:Oe2:xsli2eeee4:lastd2:ysli2ee2:vsl1:Xe2:xsli0eeee4:lastd2:ysli2ee2:vsl1:Oe2:xsli1eeeee4:lastd2:ysli2ee2:vsl1:Oe2:xsli2eeee4:lastd2:ysli1ee2:vsl1:Xe2:xsli1eeee"
+message' = "d4:lastd2:ysli2ee2:vsl1:Oe2:xsli0eee4:prevd4:prevd4:prevd4:lastd2:ysli0ee2:vsl1:Xe2:xsli1eee4:prevd4:prevd4:prevd4:prevd4:lastd2:ysli1ee2:vsl1:Xe2:xsli1eeee4:lastd2:ysli1ee2:vsl1:Oe2:xsli2eeee4:lastd2:ysli0ee2:vsl1:Xe2:xsli2eeee4:lastd2:ysli1ee2:vsl1:Oe2:xsli0eeeee4:lastd2:ysli0ee2:vsl1:Oe2:xsli0eeee4:lastd2:ysli2ee2:vsl1:Xe2:xsli2eeeee"
 
 type To = [[(Int, Char)]]
 
 expectedParse :: Either String JsonLikeValue
-expectedParse = Left "Error at position 168. But, dear students, please make your error more informative"
+expectedParse = Right $ JLMap [("last", JLMap [("ys", JLArray [JLInt 2]), ("vs", JLArray [JLString "O"]), ("xs", JLArray [JLInt 0])]), ("prev", JLMap [("prev", JLMap [("prev", JLMap [("last", JLMap [("ys", JLArray [JLInt 0]), ("vs", JLArray [JLString "X"]), ("xs", JLArray [JLInt 1])]), ("prev", JLMap [("prev", JLMap [("prev", JLMap [("prev", JLMap [("last", JLMap [("ys", JLArray [JLInt 1]), ("vs", JLArray [JLString "X"]), ("xs", JLArray [JLInt 1])])]), ("last", JLMap [("ys", JLArray [JLInt 1]), ("vs", JLArray [JLString "O"]), ("xs", JLArray [JLInt 2])])]), ("last", JLMap [("ys", JLArray [JLInt 0]), ("vs", JLArray [JLString "X"]), ("xs", JLArray [JLInt 2])])]), ("last", JLMap [("ys", JLArray [JLInt 1]), ("vs", JLArray [JLString "O"]), ("xs", JLArray [JLInt 0])])])]), ("last", JLMap [("ys", JLArray [JLInt 0]), ("vs", JLArray [JLString "O"]), ("xs", JLArray [JLInt 0])])]), ("last", JLMap [("ys", JLArray [JLInt 2]), ("vs", JLArray [JLString "X"]), ("xs", JLArray [JLInt 2])])])]
 
 expectedConvert :: Either InvalidState To
-expectedConvert = Right [[(0, 'O'), (1, 'X'), (2, 'X')], [(0, 'X'), (1, 'X'), (2, 'O')], [(0, 'X'), (1, 'O'), (2, 'O')]]
+expectedConvert = Left Order
