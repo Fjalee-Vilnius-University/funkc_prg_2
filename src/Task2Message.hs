@@ -18,8 +18,7 @@ size :: Int
 size = 3
 
 message :: String
---message = "d4:lastd2:ysli2ee2:vsl1:Oe2:xsli0eee4:prevd4:prevd4:prevd4:lastd2:ysli0ee2:vsl1:Xe2:xsli1eee4:prevd4:prevd4:prevd4:prevd4:lastd2:ysli1ee2:vsl1:Xe2:xsli1eeee4:lastd2:ysli1ee2:vsl1:Oe2:xsli2eeee4:lastd2:ysli0ee2:vsl1:Xe2:xsli2eeee4:lastd2:ysli1ee2:vsl1:Oe2:xsli0eeeee4:lastd2:ysli0ee2:vsl1:Oe2:xsli0eeee4:lastd2:ysli2ee2:vsl1:Xe2:xsli2eeeee"
-message = "li1eee4:prevd4:prevd4:prevd4:prevd4:lastd2:ysli1ee2:vsl1:Xe2:xsli1eeee4:lastd2:ysli1ee2:vsl1:Oe2:xsli2eeee4:lastd2:ysli0ee2:vsl1:Xe2:xsli2eeee4:lastd2:ysli1ee2:vsl1:Oe2:xsli0eeeee4:lastd2:ysli0ee2:vsl1:Oe2:xsli0eeee4:lastd2:ysli2ee2:vsl1:Xe2:xsli2eeeee"
+message = "d4:lastli2ee2:vsl1:Oe2:xsli0eee4:prevd4:prevd4:prevd4:lastd2:ysli0ee2:vsl1:Xe2:xsli1eee4:prevd4:prevd4:prevd4:prevd4:lastd2:ysli1ee2:vsl1:Xe2:xsli1eeee4:lastd2:ysli1ee2:vsl1:Oe2:xsli2eeee4:lastd2:ysli0ee2:vsl1:Xe2:xsli2eeee4:lastd2:ysli1ee2:vsl1:Oe2:xsli0eeeee4:lastd2:ysli0ee2:vsl1:Oe2:xsli0eeee4:lastd2:ysli2ee2:vsl1:Xe2:xsli2eeeee"
 
 
 message' :: String
