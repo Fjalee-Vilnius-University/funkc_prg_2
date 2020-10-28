@@ -60,29 +60,29 @@ import Task2Message
 --     else Left "Error, JsonLikeValue has to start with a 'd' or a 'l' or an 'i' or a digit"
 -- parseJLValue ([], errPos) = Left "Empty JLValue"
 
--- parseJLArray :: (String, Int) -> Either String (JsonLikeValue, String)
--- parseJLArray (('l':t), errPos) = 
---     case parseJLIntOrString t of
---         Left a -> Left a
---         Right (value, (fstCh : rest)) ->
---             case fstCh of
---                 'e' -> Right (JLArray [value], rest)
---                 _ -> Left "Error, one element list has to end with an 'e' after first element in the array"
--- parseJLArray (_, errPos) = Left "Error, list has to start with an 'l'"
--- parseJLArray ([], errPos) = Left "Empty Array"
+parseJLArray :: (String, Int) -> Either String (JsonLikeValue, String, Int)
+parseJLArray (('l':t), errPos) = 
+    case parseJLIntOrString (t, errPos) of
+        Left a -> Left a
+        Right (value, (fstCh : rest), errPos) ->
+            case fstCh of
+                'e' -> Right (JLArray [value], rest, errPos + lenDiff ('l':t) rest)
+                _ -> Left ("Error around character " ++ show errPos ++ ", one element list has to end with an 'e' after first element in the array")
+parseJLArray (_, errPos) = Left ("Error around character " ++ show errPos ++ ", list has to start with an 'l'")
+parseJLArray ([], errPos) = Left ("Error around character " ++ show errPos ++ "Empty Array")
 
--- parseJLIntOrString :: (String, Int) -> Either String (JsonLikeValue, String)
--- parseJLIntOrString (('i':t), errPos) = 
---     case parseJLInt ('i':t) of
---         Left a -> Left a
---         Right (a, b) -> Right (a, b)
--- parseJLIntOrString ((h:t), errPos) =
---     if C.isDigit h
---     then case parseJLString (h:t) of
---         Left a -> Left a
---         Right (a, b) -> Right (a, b)
---     else Left "Error, Value is nether an Int or a String"
--- parseJLIntOrString ([], errPos) = Left "Empty Int or String"
+parseJLIntOrString :: (String, Int) -> Either String (JsonLikeValue, String, Int)
+parseJLIntOrString (('i':t), errPos) = 
+    case parseJLInt (('i':t), errPos) of
+        Left a -> Left a
+        Right (a, b, c) -> Right (a, b, c)
+parseJLIntOrString ((h:t), errPos) =
+    if C.isDigit h
+    then case parseJLString ((h:t), errPos) of
+        Left a -> Left a
+        Right (a, b, c) -> Right (a, b, c)
+    else Left ("Error around character " ++ show errPos ++ ", Value is nether an Int or a String")
+parseJLIntOrString ([], errPos) = Left ("Error around character " ++ show errPos ++ ", Empty Int or String")
 
 parseJLInt :: (String, Int) -> Either String (JsonLikeValue, String, Int)
 parseJLInt (('i':t), errPos) = 
