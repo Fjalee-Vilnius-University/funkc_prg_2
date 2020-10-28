@@ -39,22 +39,27 @@ import Task2Message
 --     in
 --         (JLMap[(name, mapInside)], rest')
 
--- parseJLArray :: String -> (JsonLikeValue, String)
--- parseJLArray ('l':t) = 
---     let 
---         (value, (fstCh : rest)) = parseJLIntOrString t
---     in
---         case fstCh of
---             'e' -> (JLArray [value], rest)
---             _ -> error "List wasnt ended correctly"
--- parseJLArrayTemp _ = error "Not a List" 
+parseJLArrayOfOneIntOrString :: String -> Either String (JsonLikeValue, String)
+parseJLArrayOfOneIntOrString ('l':t) = 
+        case parseJLIntOrString t of
+            Left a -> Left a
+            Right (value, (fstCh : rest)) ->
+                case fstCh of
+                    'e' -> Right (JLArray [value], rest)
+                    _ -> Left "Error, one element list has to end with an 'e' after first element in the array"
+parseJLArrayOfOneIntOrString _ = Left "Error, list has to start with an 'l'"
 
--- parseJLIntOrString :: String -> (JsonLikeValue, String)
--- parseJLIntOrString ('i':t) = parseJLInt ('i':t)
--- parseJLIntOrString (h:t) =
---     if C.isDigit h
---     then parseJLString (h:t)
---     else error "Not Int or String"
+parseJLIntOrString :: String -> Either String (JsonLikeValue, String)
+parseJLIntOrString ('i':t) = 
+    case parseJLInt ('i':t) of
+        Left a -> Left a
+        Right (a, b) -> Right (a, b)
+parseJLIntOrString (h:t) =
+    if C.isDigit h
+    then case parseJLString (h:t) of
+        Left a -> Left a
+        Right (a, b) -> Right (a, b)
+    else Left "Error, Value is nether an Int or a String"
 
 parseJLInt :: String -> Either String (JsonLikeValue, String)
 parseJLInt ('i':t) = 
