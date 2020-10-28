@@ -1,18 +1,11 @@
 module Task2Message
 where
 
--- ┌                   ┐
--- │ X X O X O O O O O │
--- │ X O X X O O X X O │
--- │ X X O X X X O O X │
--- │ X X O X O X X O X │
--- │ O X O O O X X X O │
--- │ X X O O X X O X O │
--- │ X O X O X O X X O │
--- │ O O O O O O X X O │
--- │ O X O O O X X X X │
--- └                   ┘
--- seed: -288296976922395874
+-- ┌     ┐
+-- │     │
+-- │ X X │
+-- └     ┘
+-- seed: -8320007728074224413
 -- encoding: Ben
 -- list entry: ARR
 -- convert to: LIL
@@ -21,18 +14,18 @@ data JsonLikeValue = JLString String | JLInt Int | JLMap [(String, JsonLikeValue
 data InvalidState = Order | Duplicates deriving (Show, Eq)
 
 size :: Int
-size = 9
+size = 2
 
 message :: String
-message = "d4:prevd4:prevd4:prevd4:lastd2:ysli0ee2:vsl1:Oe2:xsli5eee4:prevd4:lastd2:ysli5ee2:vsl1:Xe2:xsli5eee4:prevd4:lastd2:ysli5ee2:vsl1:Oe2:xsli6eee4:prevd4:lastd2:ysli2ee2:vsl1:Xe2:xsli0eee4:prevd4:lastd2:ysli2ee2:vsl1:Oe2:xsli2eee4:prevd4:prevd4:lastd2:ysli2ee2:vsl1:Oe2:xsli7eee4:prevd4:lastd2:ysli2ee2:vsl1:Xe2:xsli8eee4:prevd4:lastd2:ysli7ee2:vsl1:Oe2:xsli5eee4:prevd4:prevd4:prevd4:lastd2:ysli3ee2:vsl1:Xe2:xsli1eee4:prevd4:lastd2:ysli4ee2:vsl1:Oe2:xsli0eee4:prevd4:prevd4:lastd2:ysli5ee2:vsl1:Oe2:xsli3eee4:prevd4:prevd4:lastd2:ysli2ee2:vsl1:Oe2:xsli6eee4:prevd4:prevd4:lastd2:ysli0ee2:vsl1:Oe2:xsli6eee4:prevd4:prevd4:prevd4:prevd4:lastd2:ysli6ee2:vsl1:Oe2:xsli8eee4:prevd4:prevd4:prevd4:lastd2:ysli8ee2:vsl1:Xe2:xsli8eee4:prevd4:lastd2:ysli6ee2:vsl1:Oe2:xsli3eee4:prevd4:lastd2:ysli3ee2:vsl1:Xe2:xsli8eee4:prevd4:prevd4:prevd4:lastd2:ysli7ee2:vsl1:Oe2:xsli2eee4:prevd4:lastd2:ysli2ee2:vsl1:Xe2:xsli1eee4:prevd4:prevd4:prevd4:lastd2:ysli7ee2:vsl1:Oe2:xsli4eee4:prevd4:lastd2:ysli3ee2:vsl1:Xe2:xsli6eee4:prevd4:prevd4:lastd2:ysli8ee2:vsl1:Xe2:xsli6eee4:prevd4:lastd2:ysli3ee2:vsl1:Oe2:xsli7eee4:prevd4:prevd4:prevd4:prevd4:lastd2:ysli0ee2:vsl1:Oe2:xsli4eee4:prevd4:prevd4:lastd2:ysli6ee2:vsl1:Oe2:xsli5eee4:prevd4:lastd2:ysli6ee2:vsl1:Xe2:xsli2eee4:prevd4:lastd2:ysli0ee2:vsl1:Oe2:xsli2eee4:prevd4:prevd4:prevd4:lastd2:ysli4ee2:vsl1:Xe2:xsli1eee4:prevd4:prevd4:prevd4:lastd2:ysli7ee2:vsl1:Oe2:xsli0eee4:prevd4:lastd2:ysli6ee2:vsl1:Xe2:xsli7eee4:prevd4:prevd4:prevd4:prevd4:prevd4:prevd4:lastd2:ysli2ee2:vsl1:Xe2:xsli3eee4:prevd4:prevd4:lastd2:ysli6ee2:vsl1:Xe2:xsli0eee4:prevd4:lastd2:ysli8ee2:vsl1:Oe2:xsli3eee4:prevd4:lastd2:ysli8ee2:vsl1:Xe2:xsli7eee4:prevd4:prevd4:lastd2:ysli4ee2:vsl1:Xe2:xsli6eee4:prevd4:lastd2:ysli4ee2:vsl1:Oe2:xsli8eee4:prevd4:prevd4:prevd4:prevd4:lastd2:ysli4ee2:vsl1:Oe2:xsli4eee4:prevd4:prevd4:prevd4:lastd2:ysli8ee2:vsl1:Xe2:xsli1eee4:prevd4:prevd4:lastd2:ysli7ee2:vsl1:Xe2:xsli6eee4:prevd4:prevd4:lastd2:ysli5ee2:vsl1:Xe2:xsli7eeee4:lastd2:ysli5ee2:vsl1:Oe2:xsli8eeeee4:lastd2:ysli8ee2:vsl1:Oe2:xsli2eeeee4:lastd2:ysli0ee2:vsl1:Oe2:xsli8eeee4:lastd2:ysli5ee2:vsl1:Xe2:xsli1eeeee4:lastd2:ysli5ee2:vsl1:Xe2:xsli4eeee4:lastd2:ysli3ee2:vsl1:Oe2:xsli2eeee4:lastd2:ysli6ee2:vsl1:Xe2:xsli6eeeeee4:lastd2:ysli8ee2:vsl1:Oe2:xsli4eeeeeee4:lastd2:ysli4ee2:vsl1:Oe2:xsli2eeeee4:lastd2:ysli7ee2:vsl1:Oe2:xsli3eeee4:lastd2:ysli0ee2:vsl1:Xe2:xsli0eeee4:lastd2:ysli5ee2:vsl1:Oe2:xsli2eeee4:lastd2:ysli3ee2:vsl1:Xe2:xsli5eeee4:lastd2:ysli6ee2:vsl1:Oe2:xsli1eeeeee4:lastd2:ysli4ee2:vsl1:Xe2:xsli5eeee4:lastd2:ysli1ee2:vsl1:Oe2:xsli8eeeee4:lastd2:ysli1ee2:vsl1:Oe2:xsli1eeee4:lastd2:ysli1ee2:vsl1:Xe2:xsli3eeeeeee4:lastd2:ysli0ee2:vsl1:Xe2:xsli1eeeee4:lastd2:ysli0ee2:vsl1:Xe2:xsli3eeee4:lastd2:ysli3ee2:vsl1:Oe2:xsli4eeee4:lastd2:ysli6ee2:vsl1:Xe2:xsli4eeeeee4:lastd2:ysli7ee2:vsl1:Oe2:xsli1eeeeee4:lastd2:ysli4ee2:vsl1:Xe2:xsli7eeee\"4:lastd2:ysli4ee2:vsl1:Oe2:xsli3eeeeee4:lastd2:ysli1ee2:vsl1:Xe2:xsli6eeee4:lastd2:ysli7ee2:vsl1:Oe2:xsli8eeeeeee4:lastd2:ysli1ee2:vsl1:Oe2:xsli5eeee4:lastd2:ysli2ee2:vsl1:Xe2:xsli4eeeee4:lastd2:ysli1ee2:vsl1:Xe2:xsli0eeee4:lastd2:ysli1ee2:vsl1:Oe2:xsli4eeee4:lastd2:ysli3ee2:vsl1:Xe2:xsli3eeeee4:lastd2:ysli3ee2:vsl1:Xe2:xsli0eeeee4:lastd2:ysli5ee2:vsl1:Xe2:xsli0eeeee4:lastd2:ysli8ee2:vsl1:Xe2:xsli5eeeeee4:lastd2:ysli8ee2:vsl1:Oe2:xsli0eeee4:lastd2:ysli7ee2:vsl1:Xe2:xsli7eeeeeee4:lastd2:ysli1ee2:vsl1:Xe2:xsli2eeeeeeeee4:lastd2:ysli2ee2:vsl1:Xe2:xsli5eeee4:lastd2:ysli0ee2:vsl1:Oe2:xsli7eeee4:lastd2:ysli1ee2:vsl1:Xe2:xsli7eeee"
+message = "d4:lastd2:vsl1:Xe2:ysli1ee2:xsli0eee4:prevd4:lastd2:vsl1:Xe2:ysli1ee2:xsli1eeeee"
 
 message' :: String
-message' = "d4:prevd4:prevd4:prevd4:lastd2:ysli0ee2:vsl1:Oe2:xsli5eee4:prevd4:lastd2:ysli5ee2:vsl1:Xe2:xsli5eee4:prevd4:lastd2:ysli5ee2:vsl1:Oe2:xsli6eee4:prevd4:lastd2:ysli2ee2:vsl1:Xe2:xsli0eee4:prevd4:lastd2:ysli2ee2:vsl1:Oe2:xsli2eee4:prevd4:prevd4:lastd2:ysli2ee2:vsl1:Oe2:xsli7eee4:prevd4:lastd2:ysli2ee2:vsl1:Xe2:xsli8eee4:prevd4:lastd2:ysli7ee2:vsl1:Oe2:xsli5eee4:prevd4:prevd4:prevd4:lastd2:ysli3ee2:vsl1:Xe2:xsli1eee4:prevd4:lastd2:ysli4ee2:vsl1:Oe2:xsli0eee4:prevd4:prevd4:lastd2:ysli5ee2:vsl1:Oe2:xsli3eee4:prevd4:prevd4:lastd2:ysli2ee2:vsl1:Oe2:xsli6eee4:prevd4:prevd4:lastd2:ysli0ee2:vsl1:Oe2:xsli6eee4:prevd4:prevd4:prevd4:prevd4:lastd2:ysli6ee2:vsl1:Oe2:xsli8eee4:prevd4:prevd4:prevd4:lastd2:ysli8ee2:vsl1:Xe2:xsli8eee4:prevd4:lastd2:ysli6ee2:vsl1:Oe2:xsli3eee4:prevd4:lastd2:ysli3ee2:vsl1:Xe2:xsli8eee4:prevd4:prevd4:prevd4:lastd2:ysli7ee2:vsl1:Oe2:xsli2eee4:prevd4:lastd2:ysli2ee2:vsl1:Xe2:xsli1eee4:prevd4:prevd4:prevd4:lastd2:ysli7ee2:vsl1:Oe2:xsli4eee4:prevd4:lastd2:ysli3ee2:vsl1:Xe2:xsli6eee4:prevd4:prevd4:lastd2:ysli8ee2:vsl1:Xe2:xsli6eee4:prevd4:lastd2:ysli3ee2:vsl1:Oe2:xsli7eee4:prevd4:prevd4:prevd4:prevd4:lastd2:ysli0ee2:vsl1:Oe2:xsli4eee4:prevd4:prevd4:lastd2:ysli6ee2:vsl1:Oe2:xsli5eee4:prevd4:lastd2:ysli6ee2:vsl1:Xe2:xsli2eee4:prevd4:lastd2:ysli0ee2:vsl1:Oe2:xsli2eee4:prevd4:prevd4:prevd4:lastd2:ysli4ee2:vsl1:Xe2:xsli1eee4:prevd4:prevd4:prevd4:lastd2:ysli7ee2:vsl1:Oe2:xsli0eee4:prevd4:lastd2:ysli6ee2:vsl1:Xe2:xsli7eee4:prevd4:prevd4:prevd4:prevd4:prevd4:prevd4:lastd2:ysli2ee2:vsl1:Xe2:xsli3eee4:prevd4:prevd4:lastd2:ysli6ee2:vsl1:Xe2:xsli0eee4:prevd4:lastd2:ysli8ee2:vsl1:Oe2:xsli3eee4:prevd4:lastd2:ysli8ee2:vsl1:Xe2:xsli7eee4:prevd4:prevd4:lastd2:ysli4ee2:vsl1:Xe2:xsli6eee4:prevd4:lastd2:ysli4ee2:vsl1:Oe2:xsli8eee4:prevd4:prevd4:prevd4:prevd4:lastd2:ysli4ee2:vsl1:Oe2:xsli4eee4:prevd4:prevd4:prevd4:lastd2:ysli8ee2:vsl1:Xe2:xsli1eee4:prevd4:prevd4:lastd2:ysli7ee2:vsl1:Xe2:xsli6eee4:prevd4:prevd4:lastd2:ysli5ee2:vsl1:Xe2:xsli7eeee4:lastd2:ysli5ee2:vsl1:Oe2:xsli8eeeee4:lastd2:ysli8ee2:vsl1:Oe2:xsli2eeeee4:lastd2:ysli0ee2:vsl1:Oe2:xsli8eeee4:lastd2:ysli5ee2:vsl1:Xe2:xsli1eeeee4:lastd2:ysli5ee2:vsl1:Xe2:xsli4eeee4:lastd2:ysli3ee2:vsl1:Oe2:xsli2eeee4:lastd2:ysli6ee2:vsl1:Xe2:xsli6eeeeee4:lastd2:ysli8ee2:vsl1:Oe2:xsli4eeeeeee4:lastd2:ysli4ee2:vsl1:Oe2:xsli2eeeee4:lastd2:ysli7ee2:vsl1:Oe2:xsli3eeee4:lastd2:ysli0ee2:vsl1:Xe2:xsli0eeee4:lastd2:ysli5ee2:vsl1:Oe2:xsli2eeee4:lastd2:ysli3ee2:vsl1:Xe2:xsli5eeee4:lastd2:ysli6ee2:vsl1:Oe2:xsli1eeeeee4:lastd2:ysli4ee2:vsl1:Xe2:xsli5eeee4:lastd2:ysli1ee2:vsl1:Oe2:xsli8eeeee4:lastd2:ysli1ee2:vsl1:Oe2:xsli1eeee4:lastd2:ysli1ee2:vsl1:Xe2:xsli3eeeeeee4:lastd2:ysli0ee2:vsl1:Xe2:xsli1eeeee4:lastd2:ysli0ee2:vsl1:Xe2:xsli3eeee4:lastd2:ysli3ee2:vsl1:Oe2:xsli4eeee4:lastd2:ysli6ee2:vsl1:Xe2:xsli4eeeeee4:lastd2:ysli7ee2:vsl1:Oe2:xsli1eeeeee4:lastd2:ysli4ee2:vsl1:Xe2:xsli7eeee4:lastd2:ysli4ee2:vsl1:Oe2:xsli3eeeeee4:lastd2:ysli1ee2:vsl1:Xe2:xsli6eeee4:lastd2:ysli7ee2:vsl1:Oe2:xsli8eeeeeee4:lastd2:ysli1ee2:vsl1:Oe2:xsli5eeee4:lastd2:ysli2ee2:vsl1:Xe2:xsli4eeeee4:lastd2:ysli1ee2:vsl1:Xe2:xsli0eeee4:lastd2:ysli1ee2:vsl1:Oe2:xsli4eeee4:lastd2:ysli3ee2:vsl1:Xe2:xsli3eeeee4:lastd2:ysli3ee2:vsl1:Xe2:xsli0eeeee4:lastd2:ysli5ee2:vsl1:Xe2:xsli0eeeee4:lastd2:ysli8ee2:vsl1:Xe2:xsli5eeeeee4:lastd2:ysli8ee2:vsl1:Oe2:xsli0eeee4:lastd2:ysli7ee2:vsl1:Xe2:xsli7eeeeeee4:lastd2:ysli1ee2:vsl1:Xe2:xsli2eeeeeeeee4:lastd2:ysli2ee2:vsl1:Xe2:xsli5eeee4:lastd2:ysli0ee2:vsl1:Oe2:xsli7eeee4:lastd2:ysli1ee2:vsl1:Xe2:xsli7eeee"
+message' = "d4:lastd2:vsl1:Xe2:ysli1ee2:xsli0eee4:prevd4:lastd2:vsl1:Xe2:ysli1ee2:xsli1eeeee"
 
 type To = [[(Int, Char)]]
 
 expectedParse :: Either String JsonLikeValue
-expectedParse = Left "Error at position 2847. But, dear students, please make your error more informative"
+expectedParse = Right $ JLMap [("last", JLMap [("vs", JLArray [JLString "X"]), ("ys", JLArray [JLInt 1]), ("xs", JLArray [JLInt 0])]), ("prev", JLMap [("last", JLMap [("vs", JLArray [JLString "X"]), ("ys", JLArray [JLInt 1]), ("xs", JLArray [JLInt 1])])])]
 
 expectedConvert :: Either InvalidState To
-expectedConvert = Right [[(0, 'X'), (1, 'X'), (2, 'O'), (3, 'X'), (4, 'O'), (5, 'O'), (6, 'O'), (7, 'O'), (8, 'O')], [(0, 'X'), (1, 'O'), (2, 'X'), (3, 'X'), (4, 'O'), (5, 'O'), (6, 'X'), (7, 'X'), (8, 'O')], [(0, 'X'), (1, 'X'), (2, 'O'), (3, 'X'), (4, 'X'), (5, 'X'), (6, 'O'), (7, 'O'), (8, 'X')], [(0, 'X'), (1, 'X'), (2, 'O'), (3, 'X'), (4, 'O'), (5, 'X'), (6, 'X'), (7, 'O'), (8, 'X')], [(0, 'O'), (1, 'X'), (2, 'O'), (3, 'O'), (4, 'O'), (5, 'X'), (6, 'X'), (7, 'X'), (8, 'O')], [(0, 'X'), (1, 'X'), (2, 'O'), (3, 'O'), (4, 'X'), (5, 'X'), (6, 'O'), (7, 'X'), (8, 'O')], [(0, 'X'), (1, 'O'), (2, 'X'), (3, 'O'), (4, 'X'), (5, 'O'), (6, 'X'), (7, 'X'), (8, 'O')], [(0, 'O'), (1, 'O'), (2, 'O'), (3, 'O'), (4, 'O'), (5, 'O'), (6, 'X'), (7, 'X'), (8, 'O')], [(0, 'O'), (1, 'X'), (2, 'O'), (3, 'O'), (4, 'O'), (5, 'X'), (6, 'X'), (7, 'X'), (8, 'X')]]
+expectedConvert = Left Order

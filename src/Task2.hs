@@ -170,3 +170,21 @@ parseString [] orgStr = Left ("Error around character " ++ show errPos ++ ", Emp
 
 lenDiff :: String -> String -> Int
 lenDiff str1 str2 = (length str1) - (length str2)
+
+
+--------------------------------------------------------------------------------------------------------------------------------
+
+--test :: Either String JsonLikeValue -> JsonLikeValue
+test a = case a of
+    Right value -> mapFind value "prev"
+
+
+--JLMap [("last", JLMap [("vs", JLArray [JLString "X"]), ("ys", JLArray [JLInt 1]), ("xs", JLArray [JLInt 0])]),
+--("prev", JLMap [("last", JLMap [("vs", JLArray [JLString "X"]), ("ys", JLArray [JLInt 1]), ("xs", JLArray [JLInt 1])])])]
+
+mapFind :: JsonLikeValue -> String -> Maybe JsonLikeValue 
+mapFind (JLMap []) _ = Nothing
+mapFind (JLMap (h:t)) needed = 
+    if (fst h) == needed
+    then Just $ snd h
+    else mapFind (JLMap t) needed

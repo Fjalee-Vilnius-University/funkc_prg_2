@@ -1,15 +1,3 @@
-
-
-Right $ JLMap [
-    ("last", JLMap [("ys", JLArray [JLInt 2]), ("vs", JLArray [JLString "O"]), ("xs", JLArray [JLInt 0])]),
-    ("prev", JLMap [("prev", JLMap [("prev", JLMap [("last", JLMap [("ys", JLArray [JLInt 0]), ("vs", JLArray [JLString "X"]), ("xs", JLArray [JLInt 1])]), ("prev", JLMap [("prev", JLMap [("prev", JLMap [("prev", JLMap [("last", JLMap [("ys", JLArray [JLInt 1]), ("vs", JLArray [JLString "X"]), ("xs", JLArray [JLInt 1])])]), ("last", JLMap [("ys", JLArray [JLInt 1]), ("vs", JLArray [JLString "O"]), ("xs", JLArray [JLInt 2])])]), ("last", JLMap [("ys", JLArray [JLInt 0]), ("vs", JLArray [JLString "X"]), ("xs", JLArray [JLInt 2])])]), ("last", JLMap [("ys", JLArray [JLInt 1]), ("vs", JLArray [JLString "O"]), ("xs", JLArray [JLInt 0])])])]), ("last", JLMap [("ys", JLArray [JLInt 0]), ("vs", JLArray [JLString "O"]), ("xs", JLArray [JLInt 0])])]),
-        ("last", JLMap [("ys", JLArray [JLInt 2]), ("vs", JLArray [JLString "X"]), ("xs", JLArray [JLInt 2])])])]
-
-
-
-
-
-
 d4:lastd2:ysli2ee2:vsl1:Oe2:xsli0eee4:prevd4:prevd4:prevd4:lastd2:ysli0ee2:vsl1:Xe2:xsli1eee4:prevd4:prevd4:prevd4:prevd4:lastd2:ysli1ee2:vsl1:Xe2:xsli1eeee4:lastd2:ysli1ee2:vsl1:Oe2:xsli2eeee4:lastd2:ysli0ee2:vsl1:Xe2:xsli2eeee4:lastd2:ysli1ee2:vsl1:Oe2:xsli0eeeee4:lastd2:ysli0ee2:vsl1:Oe2:xsli0eeee4:lastd2:ysli2ee2:vsl1:Xe2:xsli2eeeee"
 
 
@@ -59,3 +47,97 @@ expectedParse = Right $ JLMap [("last", JLMap [("ys", JLArray [JLInt 2]), ("vs",
 
 message' = "d4:lastd2:ysli2ee2:vsl1:Oe2:xsli0eee4:prevd4:prevd4:prevd4:lastd2:ysli0ee2:vsl1:Xe2:xsli1eee4:prevd4:prevd4:prevd4:prevd4:lastd2:ysli1ee2:vsl1:Xe2:xsli1eeee4:lastd2:ysli1ee2:vsl1:Oe2:xsli2eeee4:lastd2:ysli0ee2:vsl1:Xe2:xsli2eeee4:lastd2:ysli1ee2:vsl1:Oe2:xsli0eeeee4:lastd2:ysli0ee2:vsl1:Oe2:xsli0eeee4:lastd2:ysli2ee2:vsl1:Xe2:xsli2eeeee"
 expectedParse = Right $ JLMap [("last", JLMap [("ys", JLArray [JLInt 2]), ("vs", JLArray [JLString "O"]), ("xs", JLArray [JLInt 0])]), ("prev", JLMap [("prev", JLMap [("prev", JLMap [("last", JLMap [("ys", JLArray [JLInt 0]), ("vs", JLArray [JLString "X"]), ("xs", JLArray [JLInt 1])]), ("prev", JLMap [("prev", JLMap [("prev", JLMap [("prev", JLMap [("last", JLMap [("ys", JLArray [JLInt 1]), ("vs", JLArray [JLString "X"]), ("xs", JLArray [JLInt 1])])]), ("last", JLMap [("ys", JLArray [JLInt 1]), ("vs", JLArray [JLString "O"]), ("xs", JLArray [JLInt 2])])]), ("last", JLMap [("ys", JLArray [JLInt 0]), ("vs", JLArray [JLString "X"]), ("xs", JLArray [JLInt 2])])]), ("last", JLMap [("ys", JLArray [JLInt 1]), ("vs", JLArray [JLString "O"]), ("xs", JLArray [JLInt 0])])])]), ("last", JLMap [("ys", JLArray [JLInt 0]), ("vs", JLArray [JLString "O"]), ("xs", JLArray [JLInt 0])])]), ("last", JLMap [("ys", JLArray [JLInt 2]), ("vs", JLArray [JLString "X"]), ("xs", JLArray [JLInt 2])])])]
+
+
+Right $ JLMap 
+[
+    (
+        "prev",
+        JLMap 
+        [
+            ("prev", JLMap [("prev", JLMap [("last", JLMap [("ys", JLArray [JLInt 0]), ("vs", JLArray [JLString "O"]), ("xs", JLArray [JLInt 0])]), ("prev", JLMap [("prev", JLMap [("prev", JLMap [("prev", JLMap [("prev", JLMap [("last", JLMap [("ys", JLArray [JLInt 1]), ("vs", JLArray [JLString "X"]), ("xs", JLArray [JLInt 2])])]), ("last", JLMap [("ys", JLArray [JLInt 0]), ("vs", JLArray [JLString "O"]), ("xs", JLArray [JLInt 2])])]), ("last", JLMap [("ys", JLArray [JLInt 2]), ("vs", JLArray [JLString "X"]), ("xs", JLArray [JLInt 2])])]), ("last", JLMap [("ys", JLArray [JLInt 1]), ("vs", JLArray [JLString "O"]), ("xs", JLArray [JLInt 0])])]), ("last", JLMap [("ys", JLArray [JLInt 2]), ("vs", JLArray [JLString "X"]), ("xs", JLArray [JLInt 0])])])]), ("last", JLMap [("ys", JLArray [JLInt 0]), ("vs", JLArray [JLString "X"]), ("xs", JLArray [JLInt 1])])]),
+            (
+                "last",
+                JLMap
+                [
+                    ("ys", JLArray [JLInt 2]), ("vs", JLArray [JLString "O"]), ("xs", JLArray [JLInt 1])
+                ]
+            
+            )
+        ]
+    ),
+    ("last", JLMap [("ys", JLArray [JLInt 1]), ("vs", JLArray [JLString "X"]), ("xs", JLArray [JLInt 1])]
+    
+    )
+]
+
+
+module Task2Message
+where
+
+-- ┌     ┐
+-- │     │
+-- │ X X │
+-- └     ┘
+-- seed: -8320007728074224413
+-- encoding: Ben
+-- list entry: ARR
+-- convert to: LIL
+
+data JsonLikeValue = JLString String | JLInt Int | JLMap [(String, JsonLikeValue)] | JLArray [JsonLikeValue] deriving (Show, Eq)
+data InvalidState = Order | Duplicates deriving (Show, Eq)
+
+size :: Int
+size = 2
+
+message :: String
+message = "d4:lastd2:vsl1:Xe2:ysli1ee2:xsli0eee4:prevd4:lastd2:vsl1:Xe2:ysli1ee2:xsli1eeeee"
+
+message' :: String
+message' = "d4:lastd2:vsl1:Xe2:ysli1ee2:xsli0eee4:prevd4:lastd2:vsl1:Xe2:ysli1ee2:xsli1eeeee"
+
+type To = [[(Int, Char)]]
+
+expectedParse :: Either String JsonLikeValue
+expectedParse = Right $ JLMap [("last", JLMap [("vs", JLArray [JLString "X"]), ("ys", JLArray [JLInt 1]), ("xs", JLArray [JLInt 0])]), ("prev", JLMap [("last", JLMap [("vs", JLArray [JLString "X"]), ("ys", JLArray [JLInt 1]), ("xs", JLArray [JLInt 1])])])]
+
+expectedConvert :: Either InvalidState To
+expectedConvert = Left Order
+
+
+
+
+
+
+module Task2Message
+where
+
+-- ┌       ┐
+-- │     X │
+-- │ O X   │
+-- │ X O X │
+-- └       ┘
+-- seed: -7497290791861643189
+-- encoding: Ben
+-- list entry: ARR
+-- convert to: LIL
+
+data JsonLikeValue = JLString String | JLInt Int | JLMap [(String, JsonLikeValue)] | JLArray [JsonLikeValue] deriving (Show, Eq)
+data InvalidState = Order | Duplicates deriving (Show, Eq)
+
+size :: Int
+size = 3
+
+message :: String
+message = "d4:prevd4:prevd4:prevd4:prevd4:prevd4:lastd2:ysli2ee2:vsl1:Xe2:xsli0eeee4:lastd2:ysli2ee2:vsl1:Xe2:xsli2eeee4:lastd\"2:ysli2ee2:vsl1:Oe2:xsli1eeee4:lastd2:ysli0ee2:vsl1:Xe2:xsli2eeee4:lastd2:ysli1ee2:vsl1:Oe2:xsli0eeee4:lastd2:ysli1ee2:vsl1:Xe2:xsli1eeee"
+
+message' :: String
+message' = "d4:prevd4:prevd4:prevd4:prevd4:prevd4:lastd2:ysli2ee2:vsl1:Xe2:xsli0eeee4:lastd2:ysli2ee2:vsl1:Xe2:xsli2eeee4:lastd2:ysli2ee2:vsl1:Oe2:xsli1eeee4:lastd2:ysli0ee2:vsl1:Xe2:xsli2eeee4:lastd2:ysli1ee2:vsl1:Oe2:xsli0eeee4:lastd2:ysli1ee2:vsl1:Xe2:xsli1eeee"
+
+type To = [[(Int, Char)]]
+
+expectedParse :: Either String JsonLikeValue
+expectedParse = Left "Error at position 116. But, dear students, please make your error more informative"
+
+expectedConvert :: Either InvalidState To
+expectedConvert = Left Order
