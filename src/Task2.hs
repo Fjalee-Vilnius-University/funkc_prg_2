@@ -3,12 +3,12 @@ import Data.List as L
 import Data.Char as C
 import Task2Message
 
--- parse :: Int -> String -> Either String JsonLikeValue
--- parse size str = 
---     case parseJLMap str of
---         Left a -> Left a
---         Right (b, "") -> Right b
---         Right (b, _) -> Left "Some values are outside of map"
+parse :: Int -> String -> Either String JsonLikeValue
+parse size str = 
+    case parseJLMap (str, 0) of
+        Left a -> Left a
+        Right (b, "", errPos) -> Right b
+        Right (b, _, errPos) -> Left "Some values are outside of map"
 
 parseJLMap :: (String, Int) -> Either String (JsonLikeValue, String, Int)
 parseJLMap (('d':t), errPos) = 
