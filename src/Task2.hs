@@ -36,6 +36,15 @@ import Task2Message
 --     then Right parseJLString (h:t)
 --     else Left "Error, value isn't JsonLikeValue"
 
+parseMapedJLString :: String -> Either String ((String, JsonLikeValue), String)
+parseMapedJLString str = 
+    case parseString str of
+        Left a -> Left a
+        Right (key, rest) ->
+            case parseJLString rest of
+                Left a -> Left a
+                Right (value, rest') -> Right ((key, value), rest')
+
 parseMapedJLInt :: String -> Either String ((String, JsonLikeValue), String)
 parseMapedJLInt str = 
     case parseString str of
