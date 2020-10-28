@@ -174,17 +174,18 @@ lenDiff str1 str2 = (length str1) - (length str2)
 
 --------------------------------------------------------------------------------------------------------------------------------
 
---test :: Either String JsonLikeValue -> JsonLikeValue
+--test :: Either String JsonLikeValue -> Maybe JsonLikeValue
 test a = case a of
-    Right value -> 
-        case mapFind value "prev" of
-            Nothing -> Nothing
-            Just value ->
-                Just $ mapFindLast value "last"
+    Right wholeMap -> 
+        case mapFind wholeMap "last" of
+            Nothing -> error "Nothing" -- fix
+            Just lstLast -> 
+                delFromMap wholeMap ("last", lstLast)
 
-
---JLMap [("last", JLMap [("vs", JLArray [JLString "X"]), ("ys", JLArray [JLInt 1]), ("xs", JLArray [JLInt 0])]),
---("prev", JLMap [("last", JLMap [("vs", JLArray [JLString "X"]), ("ys", JLArray [JLInt 1]), ("xs", JLArray [JLInt 1])])])]
+delFromMap :: JsonLikeValue -> (String, JsonLikeValue) -> JsonLikeValue
+delFromMap wholeMap itemDel = 
+    case wholeMap of
+        JLMap arrayOfTuples -> JLMap $ delete itemDel arrayOfTuples
 
 mapFind :: JsonLikeValue -> String -> Maybe JsonLikeValue 
 mapFind (JLMap []) _ = Nothing
