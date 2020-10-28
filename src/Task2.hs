@@ -5,87 +5,114 @@ import Task2Message
 
 parse :: Int -> String -> Either String JsonLikeValue
 parse size str = 
-    case parseJLMap (str, 0) of
+    case parseJLMap str str of
         Left a -> Left a
-        Right (b, "", errPos) -> Right b
-        Right (b, _, errPos) -> Left "Some values are outside of map"
+        Right (b, "") -> Right b
+        Right (b, _) -> Left "Some values are outside of map"
 
-parseJLMap :: (String, Int) -> Either String (JsonLikeValue, String, Int)
-parseJLMap (('d':t), errPos) = 
-    case parseAllMapedJLValues (t, errPos) of
+parseJLMap :: String -> String -> Either String (JsonLikeValue, String)
+parseJLMap ('d':t) orgStr = 
+    case parseAllMapedJLValues t orgStr of
         Left a -> Left a
-        Right (mapBody, rest, errPos) -> Right (mapBody, rest, errPos)
-parseJLMap (_, errPos) = Left ("Error around character " ++ show errPos ++ ", map has to start with a 'd'")
+        Right (mapBody, rest) -> Right (mapBody, rest)
+parseJLMap dnStartD orgStr = Left ("Error around character " ++ show errPos ++ ", map has to start with a 'd'")
+    where 
+        errPos = lenDiff orgStr dnStartD
 
-parseAllMapedJLValues :: (String, Int) -> Either String (JsonLikeValue, String, Int)
-parseAllMapedJLValues (('e':t), errPos) = Right (JLMap [], t, errPos)
-parseAllMapedJLValues (str, errPos) =
-    case parseMapedJLValue (str, errPos) of
+parseAllMapedJLValues :: String -> String -> Either String (JsonLikeValue, String)
+parseAllMapedJLValues ('e':t) orgStr = Right (JLMap [], t)
+parseAllMapedJLValues str orgStr =
+    case parseMapedJLValue str orgStr of
         Left a -> Left a
-        Right ((key, value), rest, errPos) ->
-            case parseAllMapedJLValues (rest, errPos) of
+        Right ((key, value), rest) ->
+            case parseAllMapedJLValues rest orgStr of
                 Left a -> Left a
-                Right (JLMap acc, rest1, errPos) -> Right $ (JLMap ([(key, value)] ++ acc), rest1, errPos)
-parseAllMapedJLValues ([], errPos) = Left ("Error around character " ++ show errPos ++ ", JLMap has to end with an 'e'")
+                Right (JLMap acc, rest1) -> Right $ (JLMap ([(key, value)] ++ acc), rest1)
+parseAllMapedJLValues [] orgStr = Left ("Error around character " ++ show errPos ++ ", JLMap has to end with an 'e'")
+    where 
+        errPos = lenDiff orgStr []
 
-parseMapedJLValue :: (String, Int) -> Either String ((String, JsonLikeValue), String, Int)
-parseMapedJLValue (str, errPos) = 
-    case parseString (str, errPos) of
+parseMapedJLValue :: String -> String -> Either String ((String, JsonLikeValue), String)
+parseMapedJLValue str orgStr = 
+    case parseString str orgStr of
         Left a -> Left a
-        Right (key, rest, errPos) ->
-            case parseJLValue (rest, errPos) of
+        Right (key, rest) ->
+            case parseJLValue rest orgStr of
                 Left a -> Left a
-                Right (value, rest', errPos) -> Right ((key, value), rest', errPos)
-parseMapedJLValue ([], errPos) = Left ("Error around character " ++ show errPos ++ ", Empty maped JLValue")
+                Right (value, rest') -> Right ((key, value), rest')
+parseMapedJLValue [] orgStr = Left ("Error around character " ++ show errPos ++ ", Empty maped JLValue")
+    where
+        errPos = lenDiff orgStr []
 
-parseJLValue :: (String, Int) -> Either String (JsonLikeValue, String, Int)
-parseJLValue (('d':t), errPos) =
-    case parseJLMap(('d':t), errPos) of
+parseJLValue :: String -> String -> Either String (JsonLikeValue, String)
+parseJLValue ('d':t) orgStr =
+    case parseJLMap('d':t) orgStr of
         Left a -> Left a
-        Right (a, b, c) -> Right (a, b, c)
-parseJLValue (('l':t), errPos) = 
-    case parseJLArray (('l':t), errPos) of
+        Right (a, b) -> Right (a, b)
+parseJLValue ('l':t) orgStr = 
+    case parseJLArray ('l':t) orgStr of
         Left a -> Left a
-        Right (a, b, c) -> Right (a, b, c)
-parseJLValue (('i':t), errPos) = 
-    case parseJLInt (('i':t), errPos) of
+        Right (a, b) -> Right (a, b)
+parseJLValue ('i':t) orgStr = 
+    case parseJLInt ('i':t) orgStr of
         Left a -> Left a
-        Right (a, b, c) -> Right (a, b, c)
-parseJLValue ((h:t), errPos) = 
+        Right (a, b) -> Right (a, b)
+parseJLValue (h:t) orgStr = 
+    let
+        errPos = lenDiff orgStr (h:t)
+    in
     if (C.isDigit h)
     then 
-        case parseJLString ((h:t), errPos) of
+        case parseJLString (h:t) orgStr of
             Left a -> Left a
-            Right (a, b, c) -> Right (a, b, c)
+            Right (a, b) -> Right (a, b)
     else Left ("Error around character " ++ show errPos ++ ", JsonLikeValue has to start with a 'd' or a 'l' or an 'i' or a digit")
-parseJLValue ([], errPos) = Left ("Error around character " ++ show errPos ++ ", Empty JLValue")
+parseJLValue [] orgStr = Left ("Error around character " ++ show errPos ++ ", Empty JLValue")
+    where
+        errPos = lenDiff orgStr []
 
-parseJLArray :: (String, Int) -> Either String (JsonLikeValue, String, Int)
-parseJLArray (('l':t), errPos) = 
-    case parseJLIntOrString (t, errPos) of
+parseJLArray :: String -> String -> Either String (JsonLikeValue, String)
+parseJLArray ('l':t) orgStr =
+    let
+        errPos = lenDiff orgStr ('l':t)
+    in
+    case parseJLIntOrString t orgStr of
         Left a -> Left a
-        Right (value, (fstCh : rest), errPos) ->
+        Right (value, (fstCh : rest)) ->
             case fstCh of
-                'e' -> Right (JLArray [value], rest, errPos + lenDiff ('l':t) rest)
-                _ -> Left ("Error around character " ++ show errPos ++ ", one element list has to end with an 'e' after first element in the array")
-parseJLArray (_, errPos) = Left ("Error around character " ++ show errPos ++ ", list has to start with an 'l'")
-parseJLArray ([], errPos) = Left ("Error around character " ++ show errPos ++ "Empty Array")
+                'e' -> Right (JLArray [value], rest)
+                _ -> Left ("Error around character " ++ show errPos ++ ", list has to end with an 'e'")
+parseJLArray [] orgStr = Left ("Error around character " ++ show errPos ++ "Empty Array")
+    where
+        errPos = lenDiff orgStr []
+parseJLArray dnStartL orgStr = Left ("Error around character " ++ show errPos ++ ", list has to start with an 'l'")
+    where
+        errPos = lenDiff orgStr dnStartL
 
-parseJLIntOrString :: (String, Int) -> Either String (JsonLikeValue, String, Int)
-parseJLIntOrString (('i':t), errPos) = 
-    case parseJLInt (('i':t), errPos) of
+parseJLIntOrString :: String -> String -> Either String (JsonLikeValue, String)
+parseJLIntOrString ('i':t) orgStr = 
+    case parseJLInt ('i':t) orgStr of
         Left a -> Left a
-        Right (a, b, c) -> Right (a, b, c)
-parseJLIntOrString ((h:t), errPos) =
+        Right (a, b) -> Right (a, b)
+parseJLIntOrString (h:t) orgStr =
+    let
+        errPos = lenDiff orgStr (h:t)
+    in
     if C.isDigit h
-    then case parseJLString ((h:t), errPos) of
+    then case parseJLString (h:t) orgStr of
         Left a -> Left a
-        Right (a, b, c) -> Right (a, b, c)
+        Right (a, b) -> Right (a, b)
     else Left ("Error around character " ++ show errPos ++ ", Value is nether an Int or a String")
-parseJLIntOrString ([], errPos) = Left ("Error around character " ++ show errPos ++ ", Empty Int or String")
+parseJLIntOrString [] orgStr = Left ("Error around character " ++ show errPos ++ ", Empty Int or String")
+    where
+        errPos = lenDiff orgStr []
 
-parseJLInt :: (String, Int) -> Either String (JsonLikeValue, String, Int)
-parseJLInt (('i':t), errPos) = 
+
+parseJLInt :: String -> String -> Either String (JsonLikeValue, String)
+parseJLInt ('i':t) orgStr = 
+        let 
+            errPos = lenDiff orgStr ('i':t)
+        in
         case C.isDigit $ head t of
             False -> Left ("Error around character " ++ show errPos ++ ", Integer has 0 digits")
             True ->
@@ -94,14 +121,19 @@ parseJLInt (('i':t), errPos) =
                         postfix = L.drop (length prefix) t
                     in
                         case postfix of
-                            ('e':r) -> Right (JLInt (read prefix), r, errPos + lenDiff ('i':t) r)
+                            ('e':r) -> Right (JLInt (read prefix), r)
                             _ -> Left ("Error around character " ++ show errPos ++ ", Integer has to end with an 'e'")
-parseJLInt (_, errPos) = Left ("Error around character " ++ show errPos ++ ", Integer has to start with an 'i'")
-parseJLInt ([], errPos) = Left ("Error around character " ++ show errPos ++ ", Empty Int")
+parseJLInt [] orgStr = Left ("Error around character " ++ show errPos ++ ", Empty Int")
+    where
+        errPos = lenDiff orgStr []
+parseJLInt dnStartI orgStr = Left ("Error around character " ++ show errPos ++ ", Integer has to start with an 'i'")
+    where
+        errPos = lenDiff orgStr dnStartI
 
-parseJLString :: (String, Int) -> Either String (JsonLikeValue, String, Int)
-parseJLString (str, errPos) =
+parseJLString :: String -> String -> Either String (JsonLikeValue, String)
+parseJLString str orgStr =
     let
+        errPos = lenDiff orgStr str
         strLen = if C.isDigit $ head str
             then L.takeWhile C.isDigit str
             else "not declared"
@@ -111,13 +143,16 @@ parseJLString (str, errPos) =
             "not declared" -> Left ("Error around character " ++ show errPos ++ ", Length of the string was not declared")
             _ ->
                 case postfix of
-                (':':r) -> Right (JLString $ L.take (read strLen) r, L.drop (read strLen) r, errPos + lenDiff str (L.drop (read strLen) r))
+                (':':r) -> Right (JLString $ L.take (read strLen) r, L.drop (read strLen) r)
                 _ -> Left ("Error around character " ++ show errPos ++ ", Invalid string")
-parseJLString ([], errPos) = Left ("Error around character " ++ show errPos ++ ", Empty String")
+parseJLString [] orgStr = Left ("Error around character " ++ show errPos ++ ", Empty String")
+    where 
+        errPos = lenDiff orgStr []
 
-parseString :: (String, Int) -> Either String (String, String, Int)
-parseString (str, errPos) =
+parseString :: String -> String -> Either String (String, String)
+parseString str orgStr =
     let
+        errPos = lenDiff orgStr str
         strLen = if C.isDigit $ head str
             then L.takeWhile C.isDigit str
             else "not declared"
@@ -127,9 +162,11 @@ parseString (str, errPos) =
             "not declared" -> Left ("Error around character " ++ show errPos ++ ", Length of the string was not declared")
             _ ->
                 case postfix of
-                (':':r) -> Right (L.take (read strLen) r, L.drop (read strLen) r, errPos + lenDiff str (L.drop (read strLen) r))
+                (':':r) -> Right (L.take (read strLen) r, L.drop (read strLen) r)
                 _ -> Left ("Error around character " ++ show errPos ++ ", Invalid string")
-parseString ([], errPos) = Left ("Error around character " ++ show errPos ++ ", Empty String")
+parseString [] orgStr = Left ("Error around character " ++ show errPos ++ ", Empty String")
+    where 
+        errPos = lenDiff orgStr []
 
 lenDiff :: String -> String -> Int
 lenDiff str1 str2 = (length str1) - (length str2)
