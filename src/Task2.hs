@@ -29,19 +29,19 @@ import Task2Message
 
 -- parseJLValue :: [Char] -> Either String (JsonLikeValue, String)
 -- parseJLValue ('d':t) = Right parseJLMap('d':t)
--- parseJLValue ('l':t) = Right parseJLArrayOfOneIntOrString ('l':t)
+-- parseJLValue ('l':t) = Right parseJLArray ('l':t)
 -- parseJLValue ('i':t) = Right parseJLInt ('i':t)
 -- parseJLValue (h:t) = 
 --     if(C.isDigit h)
 --     then Right parseJLString (h:t)
 --     else Left "Error, value isn't JsonLikeValue"
 
-parseMapedJLArrayOfOneIntOrString :: String -> Either String ((String, JsonLikeValue), String)
-parseMapedJLArrayOfOneIntOrString str = 
+parseMapedJLArray :: String -> Either String ((String, JsonLikeValue), String)
+parseMapedJLArray str = 
     case parseString str of
         Left a -> Left a
         Right (key, rest) ->
-            case parseJLArrayOfOneIntOrString rest of
+            case parseJLArray rest of
                 Left a -> Left a
                 Right (value, rest') -> Right ((key, value), rest')
 
@@ -63,15 +63,15 @@ parseMapedJLInt str =
                 Left a -> Left a
                 Right (value, rest') -> Right ((key, value), rest')
 
-parseJLArrayOfOneIntOrString :: String -> Either String (JsonLikeValue, String)
-parseJLArrayOfOneIntOrString ('l':t) = 
+parseJLArray :: String -> Either String (JsonLikeValue, String)
+parseJLArray ('l':t) = 
     case parseJLIntOrString t of
         Left a -> Left a
         Right (value, (fstCh : rest)) ->
             case fstCh of
                 'e' -> Right (JLArray [value], rest)
                 _ -> Left "Error, one element list has to end with an 'e' after first element in the array"
-parseJLArrayOfOneIntOrString _ = Left "Error, list has to start with an 'l'"
+parseJLArray _ = Left "Error, list has to start with an 'l'"
 
 parseJLIntOrString :: String -> Either String (JsonLikeValue, String)
 parseJLIntOrString ('i':t) = 
