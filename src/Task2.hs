@@ -3,29 +3,30 @@ import Data.List as L
 import Data.Char as C
 import Task2Message
 
---data JsonLikeValue = JLString String | JLInt Int | JLMap [(String, JsonLikeValue)] | JLArray [JsonLikeValue] deriving (Show, Eq)
+parse :: Int -> String -> Either String JsonLikeValue
+parse size str = 
+    case parseJLMap str of
+        Left a -> Left a
+        Right (b, "") -> Right b
+        Right (b, _) -> Left "Some values are outside of map"
 
--- parseJLMap :: String -> Either String (JsonLikeValue, String)
--- parseJLMap ('d':t) = 
---         case parseString t of
---             Left a -> Left a
---             Right (key, rest) ->
---                 parseJLMapBody rest
---             -- case name of
---                 --   "prev" -> (JLMap[(name, mapInside)], newRest)
---                 --   "last" -> (JLMap[(name, mapInside)], newRest)
---                 --   _ -> error "Not Map"
--- parseJLMap _ = Left "Error, map has to start with a 'd'"
+parseJLMap :: String -> Either String (JsonLikeValue, String)
+parseJLMap ('d':t) = 
+    case parseAllMapedJLValues t of
+        Left a -> Left a
+        Right (mapBody, rest) -> Right (mapBody, rest)
+parseJLMap _ = Left "Error, map has to start with a 'd'"
 
---d2:ysli2ee2:vsl1:Oe2:xsli0eee4:prevd4:prevd4:prevd4:lastd2:ysli0ee2:vsl1:Xe2:xsli1eee4:prevd4:prevd4:prevd4:prevd4:lastd2:ysli1ee2:vsl1:Xe2:xsli1eeee4:lastd2:ysli1ee2:vsl1:Oe2:xsli2eeee4:lastd2:ysli0ee2:vsl1:Xe2:xsli2eeee4:lastd2:ysli1ee2:vsl1:Oe2:xsli0eeeee4:lastd2:ysli0ee2:vsl1:Oe2:xsli0eeee4:lastd2:ysli2ee2:vsl1:Xe2:xsli2eeeee"
--- parseJLMapBody bodyStr = 
---     let
---        (mapInside, rest) = parseJLValue bodyStr
---        rest' = if (take 1 rest == "e")
---                 then drop 1 rest
---                 else 
---     in
---         (JLMap[(name, mapInside)], rest')
+parseAllMapedJLValues :: String -> Either String (JsonLikeValue, String)
+parseAllMapedJLValues ('e':t) = Right (JLMap [], t)
+parseAllMapedJLValues str =
+    case parseMapedJLValue str of
+        Left a -> Left a
+        Right ((key, value), rest) ->
+            case parseAllMapedJLValues rest of
+                Left a -> Left a
+                Right (JLMap acc, rest1) -> Right $ (JLMap ([(key, value)] ++ acc), rest1)
+parseAllMapedJLValues [] = Left "Error, JLMap has to end with an 'e'"
 
 parseMapedJLValue :: String -> Either String ((String, JsonLikeValue), String)
 parseMapedJLValue str = 
@@ -37,10 +38,10 @@ parseMapedJLValue str =
                 Right (value, rest') -> Right ((key, value), rest')
 
 parseJLValue :: [Char] -> Either String (JsonLikeValue, String)
-parseJLValue ('d':t) = undefined
-    -- case parseJLMap('d':t) of
-    --     Left a -> Left a
-    --     Right (a, b) -> (a, b)
+parseJLValue ('d':t) =
+    case parseJLMap('d':t) of
+        Left a -> Left a
+        Right (a, b) -> Right (a, b)
 parseJLValue ('l':t) = 
     case parseJLArray ('l':t) of
         Left a -> Left a
