@@ -176,7 +176,11 @@ lenDiff str1 str2 = (length str1) - (length str2)
 
 --test :: Either String JsonLikeValue -> JsonLikeValue
 test a = case a of
-    Right value -> mapFind value "prev"
+    Right value -> 
+        case mapFind value "prev" of
+            Nothing -> Nothing
+            Just value ->
+                Just $ mapFindLast value "last"
 
 
 --JLMap [("last", JLMap [("vs", JLArray [JLString "X"]), ("ys", JLArray [JLInt 1]), ("xs", JLArray [JLInt 0])]),
@@ -188,3 +192,19 @@ mapFind (JLMap (h:t)) needed =
     if (fst h) == needed
     then Just $ snd h
     else mapFind (JLMap t) needed
+
+mapFindLast :: JsonLikeValue -> String -> Maybe JsonLikeValue 
+mapFindLast (JLMap []) _ = Nothing
+mapFindLast (JLMap (h:t)) needed = 
+    case mapFind (JLMap (h:t)) needed of
+        Nothing -> Nothing
+        Just value ->
+            case isMapContains value needed of
+                False -> Just value
+                True -> mapFindLast value needed
+            
+isMapContains ::  JsonLikeValue -> String -> Bool
+isMapContains (JLMap (h:t)) needed = 
+    case mapFind (JLMap (h:t)) needed of
+        Nothing -> False
+        Just _ -> True

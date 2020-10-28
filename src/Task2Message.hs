@@ -1,11 +1,13 @@
 module Task2Message
 where
 
--- ┌     ┐
--- │     │
--- │ X X │
--- └     ┘
--- seed: -8320007728074224413
+-- ┌         ┐
+-- │ O X O O │
+-- │ X O X   │
+-- │ X X O X │
+-- │   O X O │
+-- └         ┘
+-- seed: 1535842634780406394
 -- encoding: Ben
 -- list entry: ARR
 -- convert to: LIL
@@ -14,18 +16,18 @@ data JsonLikeValue = JLString String | JLInt Int | JLMap [(String, JsonLikeValue
 data InvalidState = Order | Duplicates deriving (Show, Eq)
 
 size :: Int
-size = 2
+size = 4
 
 message :: String
-message = "d4:lastd2:vsl1:Xe2:ysli1ee2:xsli0eee4:prevd4:lastd2:vsl1:Xe2:ysli1ee2:xsli1eeeee"
+message = "d4:prevd4:lastd2:vsl1:Xe2:xsli0ee2:ysli2eee4:prevd4:lastd2:vsl1:Oe2:xsli0ee2:ysli0eee4:prevd4:prevd4:lastd2:vsl1:Oe2:xsli2ee2:ysli2eee4:prevd4:prevd4:lastd2:vsl1:Oe2:xsli1ee2:ysl\"i3eee4:prevd4:prevd4:lastd2:vsl1:Oe2:xsli3ee2:ysli3eee4:prevd4:prevd4:lastd2:vsl1:Oe2:xsli3ee2:ysli0eee4:prevd4:lastd2:vsl1:Xe2:xsli3ee2:ysli2eee4:prevd4:prevd4:lastd2:vsl1:Xe2:xsli0ee2:ysli1eeee4:lastd2:vsl1:Oe2:xsli2ee2:ysli0eeeeee4:lastd2:vsl1:Xe2:xsli1ee2:ysli0eeeee4:lastd2:vsl1:Xe2:xsli2ee2:ysli3eeeee4:lastd2:vsl1:Xe2:xsli1ee2:ysli2eeeee4:lastd2:vsl1:Xe2:xsli2ee2:ysli1eeeeee4:lastd2:vsl1:Oe2:xsli1ee2:ysli1eeee"
 
 message' :: String
-message' = "d4:lastd2:vsl1:Xe2:ysli1ee2:xsli0eee4:prevd4:lastd2:vsl1:Xe2:ysli1ee2:xsli1eeeee"
+message' = "d4:prevd4:lastd2:vsl1:Xe2:xsli0ee2:ysli2eee4:prevd4:lastd2:vsl1:Oe2:xsli0ee2:ysli0eee4:prevd4:prevd4:lastd2:vsl1:Oe2:xsli2ee2:ysli2eee4:prevd4:prevd4:lastd2:vsl1:Oe2:xsli1ee2:ysli3eee4:prevd4:prevd4:lastd2:vsl1:Oe2:xsli3ee2:ysli3eee4:prevd4:prevd4:lastd2:vsl1:Oe2:xsli3ee2:ysli0eee4:prevd4:lastd2:vsl1:Xe2:xsli3ee2:ysli2eee4:prevd4:prevd4:lastd2:vsl1:Xe2:xsli0ee2:ysli1eeee4:lastd2:vsl1:Oe2:xsli2ee2:ysli0eeeeee4:lastd2:vsl1:Xe2:xsli1ee2:ysli0eeeee4:lastd2:vsl1:Xe2:xsli2ee2:ysli3eeeee4:lastd2:vsl1:Xe2:xsli1ee2:ysli2eeeee4:lastd2:vsl1:Xe2:xsli2ee2:ysli1eeeeee4:lastd2:vsl1:Oe2:xsli1ee2:ysli1eeee"
 
 type To = [[(Int, Char)]]
 
 expectedParse :: Either String JsonLikeValue
-expectedParse = Right $ JLMap [("last", JLMap [("vs", JLArray [JLString "X"]), ("ys", JLArray [JLInt 1]), ("xs", JLArray [JLInt 0])]), ("prev", JLMap [("last", JLMap [("vs", JLArray [JLString "X"]), ("ys", JLArray [JLInt 1]), ("xs", JLArray [JLInt 1])])])]
+expectedParse = Left "Error at position 179. But, dear students, please make your error more informative"
 
 expectedConvert :: Either InvalidState To
-expectedConvert = Left Order
+expectedConvert = Right [[(0, 'O'), (1, 'X'), (2, 'O'), (3, 'O')], [(0, 'X'), (1, 'O'), (2, 'X')], [(0, 'X'), (1, 'X'), (2, 'O'), (3, 'X')], [(1, 'O'), (2, 'X'), (3, 'O')]]
