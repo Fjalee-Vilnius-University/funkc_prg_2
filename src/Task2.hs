@@ -27,41 +27,35 @@ import Task2Message
 --     in
 --         (JLMap[(name, mapInside)], rest')
 
--- parseJLValue :: [Char] -> Either String (JsonLikeValue, String)
--- parseJLValue ('d':t) = Right parseJLMap('d':t)
--- parseJLValue ('l':t) = Right parseJLArray ('l':t)
--- parseJLValue ('i':t) = Right parseJLInt ('i':t)
--- parseJLValue (h:t) = 
---     if(C.isDigit h)
---     then Right parseJLString (h:t)
---     else Left "Error, value isn't JsonLikeValue"
-
-parseMapedJLArray :: String -> Either String ((String, JsonLikeValue), String)
-parseMapedJLArray str = 
+parseMapedJLValue :: String -> Either String ((String, JsonLikeValue), String)
+parseMapedJLValue str = 
     case parseString str of
         Left a -> Left a
         Right (key, rest) ->
-            case parseJLArray rest of
+            case parseJLValue rest of
                 Left a -> Left a
                 Right (value, rest') -> Right ((key, value), rest')
 
-parseMapedJLString :: String -> Either String ((String, JsonLikeValue), String)
-parseMapedJLString str = 
-    case parseString str of
+parseJLValue :: [Char] -> Either String (JsonLikeValue, String)
+parseJLValue ('d':t) = undefined
+    -- case parseJLMap('d':t) of
+    --     Left a -> Left a
+    --     Right (a, b) -> (a, b)
+parseJLValue ('l':t) = 
+    case parseJLArray ('l':t) of
         Left a -> Left a
-        Right (key, rest) ->
-            case parseJLString rest of
-                Left a -> Left a
-                Right (value, rest') -> Right ((key, value), rest')
-
-parseMapedJLInt :: String -> Either String ((String, JsonLikeValue), String)
-parseMapedJLInt str = 
-    case parseString str of
+        Right (a, b) -> Right (a, b)
+parseJLValue ('i':t) = 
+    case parseJLInt ('i':t) of
         Left a -> Left a
-        Right (key, rest) ->
-            case parseJLInt rest of
-                Left a -> Left a
-                Right (value, rest') -> Right ((key, value), rest')
+        Right (a, b) -> Right (a, b)
+parseJLValue (h:t) = 
+    if (C.isDigit h)
+    then 
+        case parseJLString (h:t) of
+            Left a -> Left a
+            Right (a, b) -> Right (a, b)
+    else Left "Error, JsonLikeValue has to start with a 'd' or a 'l' or an 'i' or a digit"
 
 parseJLArray :: String -> Either String (JsonLikeValue, String)
 parseJLArray ('l':t) = 
