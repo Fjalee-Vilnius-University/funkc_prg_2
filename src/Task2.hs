@@ -84,20 +84,20 @@ import Task2Message
 --     else Left "Error, Value is nether an Int or a String"
 -- parseJLIntOrString ([], errPos) = Left "Empty Int or String"
 
--- parseJLInt :: (String, Int) -> Either String (JsonLikeValue, String)
--- parseJLInt (('i':t), errPos) = 
---         case C.isDigit $ head t of
---             False -> Left "Error, Integer has 0 digits"
---             True ->
---                     let
---                         prefix = L.takeWhile C.isDigit t
---                         postfix = L.drop (length prefix) t
---                     in
---                         case postfix of
---                             ('e':r) -> Right (JLInt (read prefix), r)
---                             _ -> Left "Error, Integer has to end with an 'e'"
--- parseJLInt _ = Left "Error, Integer has to start with an 'i'"
--- parseJLInt ([], errPos) = Left "Empty Int"
+parseJLInt :: (String, Int) -> Either String (JsonLikeValue, String, Int)
+parseJLInt (('i':t), errPos) = 
+        case C.isDigit $ head t of
+            False -> Left ("Error around character " ++ show errPos ++ ", Integer has 0 digits")
+            True ->
+                    let
+                        prefix = L.takeWhile C.isDigit t
+                        postfix = L.drop (length prefix) t
+                    in
+                        case postfix of
+                            ('e':r) -> Right (JLInt (read prefix), r, errPos + lenDiff ('i':t) r)
+                            _ -> Left ("Error around character " ++ show errPos ++ ", Integer has to end with an 'e'")
+parseJLInt (_, errPos) = Left ("Error around character " ++ show errPos ++ ", Integer has to start with an 'i'")
+parseJLInt ([], errPos) = Left ("Error around character " ++ show errPos ++ ", Empty Int")
 
 parseJLString :: (String, Int) -> Either String (JsonLikeValue, String, Int)
 parseJLString (str, errPos) =
