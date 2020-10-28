@@ -38,27 +38,27 @@ import Task2Message
 --                 Right (value, rest') -> Right ((key, value), rest')
 -- parseMapedJLValue ([], errPos) = Left "Empty maped JLValue"
 
--- parseJLValue :: (String, Int) -> Either String (JsonLikeValue, String)
--- parseJLValue (('d':t), errPos) =
---     case parseJLMap('d':t) of
---         Left a -> Left a
---         Right (a, b) -> Right (a, b)
--- parseJLValue (('l':t), errPos) = 
---     case parseJLArray ('l':t) of
---         Left a -> Left a
---         Right (a, b) -> Right (a, b)
--- parseJLValue (('i':t), errPos) = 
---     case parseJLInt ('i':t) of
---         Left a -> Left a
---         Right (a, b) -> Right (a, b)
--- parseJLValue ((h:t), errPos) = 
---     if (C.isDigit h)
---     then 
---         case parseJLString (h:t) of
---             Left a -> Left a
---             Right (a, b) -> Right (a, b)
---     else Left "Error, JsonLikeValue has to start with a 'd' or a 'l' or an 'i' or a digit"
--- parseJLValue ([], errPos) = Left "Empty JLValue"
+parseJLValue :: (String, Int) -> Either String (JsonLikeValue, String, Int)
+parseJLValue (('d':t), errPos) =
+    case parseJLMap(('d':t), errPos) of
+        Left a -> Left a
+        Right (a, b, c) -> Right (a, b, c)
+parseJLValue (('l':t), errPos) = 
+    case parseJLArray (('l':t), errPos) of
+        Left a -> Left a
+        Right (a, b, c) -> Right (a, b, c)
+parseJLValue (('i':t), errPos) = 
+    case parseJLInt (('i':t), errPos) of
+        Left a -> Left a
+        Right (a, b, c) -> Right (a, b, c)
+parseJLValue ((h:t), errPos) = 
+    if (C.isDigit h)
+    then 
+        case parseJLString ((h:t), errPos) of
+            Left a -> Left a
+            Right (a, b, c) -> Right (a, b, c)
+    else Left ("Error around character " ++ show errPos ++ ", JsonLikeValue has to start with a 'd' or a 'l' or an 'i' or a digit")
+parseJLValue ([], errPos) = Left ("Error around character " ++ show errPos ++ ", Empty JLValue")
 
 parseJLArray :: (String, Int) -> Either String (JsonLikeValue, String, Int)
 parseJLArray (('l':t), errPos) = 
