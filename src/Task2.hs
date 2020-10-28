@@ -36,6 +36,7 @@ parseMapedJLValue str =
             case parseJLValue rest of
                 Left a -> Left a
                 Right (value, rest') -> Right ((key, value), rest')
+parseMapedJLValue [] = Left "Empty maped JLValue"
 
 parseJLValue :: [Char] -> Either String (JsonLikeValue, String)
 parseJLValue ('d':t) =
@@ -57,6 +58,7 @@ parseJLValue (h:t) =
             Left a -> Left a
             Right (a, b) -> Right (a, b)
     else Left "Error, JsonLikeValue has to start with a 'd' or a 'l' or an 'i' or a digit"
+parseJLValue [] = Left "Empty JLValue"
 
 parseJLArray :: String -> Either String (JsonLikeValue, String)
 parseJLArray ('l':t) = 
@@ -67,6 +69,7 @@ parseJLArray ('l':t) =
                 'e' -> Right (JLArray [value], rest)
                 _ -> Left "Error, one element list has to end with an 'e' after first element in the array"
 parseJLArray _ = Left "Error, list has to start with an 'l'"
+parseJLArray [] = Left "Empty Array"
 
 parseJLIntOrString :: String -> Either String (JsonLikeValue, String)
 parseJLIntOrString ('i':t) = 
@@ -79,6 +82,7 @@ parseJLIntOrString (h:t) =
         Left a -> Left a
         Right (a, b) -> Right (a, b)
     else Left "Error, Value is nether an Int or a String"
+parseJLIntOrString [] = Left "Empty Int or String"
 
 parseJLInt :: String -> Either String (JsonLikeValue, String)
 parseJLInt ('i':t) = 
@@ -93,6 +97,7 @@ parseJLInt ('i':t) =
                             ('e':r) -> Right (JLInt (read prefix), r)
                             _ -> Left "Error, Integer has to end with an 'e'"
 parseJLInt _ = Left "Error, Integer has to start with an 'i'"
+parseJLInt [] = Left "Empty Int"
 
 parseJLString :: String -> Either String (JsonLikeValue, String)
 parseJLString str =
@@ -108,6 +113,7 @@ parseJLString str =
                 case postfix of
                 (':':r) -> Right (JLString $ L.take (read strLen) r, L.drop (read strLen) r)
                 _ -> Left "Error, Invalid string"
+parseJLString [] = Left "Empty String"
 
 parseString :: String -> Either String (String, String)
 parseString str =
@@ -123,3 +129,4 @@ parseString str =
                 case postfix of
                 (':':r) -> Right (L.take (read strLen) r, L.drop (read strLen) r)
                 _ -> Left "Error, Invalid string"
+parseString [] = Left "Empty String"

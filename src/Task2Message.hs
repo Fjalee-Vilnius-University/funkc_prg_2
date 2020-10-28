@@ -1,12 +1,14 @@
 module Task2Message
 where
 
--- ┌       ┐
--- │ O X X │
--- │ O X O │
--- │ O   X │
--- └       ┘
--- seed: -2562625625236972899
+-- ┌           ┐
+-- │ O X X O O │
+-- │ X X ? O O │
+-- │ X X O O X │
+-- │ X O X O X │
+-- │ X X O O O │
+-- └           ┘
+-- seed: -4586556274488441162
 -- encoding: Ben
 -- list entry: ARR
 -- convert to: LIL
@@ -15,25 +17,18 @@ data JsonLikeValue = JLString String | JLInt Int | JLMap [(String, JsonLikeValue
 data InvalidState = Order | Duplicates deriving (Show, Eq)
 
 size :: Int
-size = 3
-
-messageTemp = "4:lastd2:ysli2ee2:vsl1:Oe2:xsli0eee4:prevd4:prevd4:prevd4:lastd2:ysli0ee2:vsl1:Xe2:xsli1eee4:prevd4:prevd4:prevd4:prevd4:lastd2:ysli1ee2:vsl1:Xe2:xsli1eeee4:lastd2:ysli1ee2:vsl1:Oe2:xsli2eeee4:lastd2:ysli0ee2:vsl1:Xe2:xsli2eeee4:lastd2:ysli1ee2:vsl1:Oe2:xsli0eeeee4:lastd2:ysli0ee2:vsl1:Oe2:xsli0eeee4:lastd2:ysli2ee2:vsl1:Xe2:xsli2eeee"
-
-messageTemp2 = "4:lastli2ee2:vsl1:Oe2:xsli0eee4:prevd4:prevd4:prevd4:lastd2:ysli0ee2:vsl1:Xe2:xsli1eee4:prevd4:prevd4:prevd4:prevd4:lastd2:ysli1ee2:vsl1:Xe2:xsli1eeee4:lastd2:ysli1ee2:vsl1:Oe2:xsli2eeee4:lastd2:ysli0ee2:vsl1:Xe2:xsli2eeee4:lastd2:ysli1ee2:vsl1:Oe2:xsli0eeeee4:lastd2:ysli0ee2:vsl1:Oe2:xsli0eeee4:lastd2:ysli2ee2:vsl1:Xe2:xsli2eeee"
+size = 5
 
 message :: String
-message = "d4:lastd2:ysli2ee2:vsl1:Oe2:xsli0eee4:prevd4:prevd4:prevd4:lastd2:ysli0ee2:vsl1:Xe2:xsli1eee4:prevd4:prevd4:prevd4:prevd4:lastd2:ysli1ee2:vsl1:Xe2:xsli1eeee4:lastd2:ysli1ee2:vsl1:Oe2:xsli2eeee4:lastd2:ysli0ee2:vsl1:Xe2:xsli2eeee4:lastd2:ysli1ee2:vsl1:Oe2:xsli0eeeee4:lastd2:ysli0ee2:vsl1:Oe2:xsli0eeee4:lastd2:ysli2ee2:vsl1:Xe2:xsli2eeeee"
-
-tempMessage :: String
-tempMessage = "d4:lastd4:prevli2eeee"
+message = "d4:prevd4:prevd4:lastd2:xsli3ee2:vsl1:Oe2:ysli3eee4:prevd4:prevd4:prevd4:lastd2:xsli4ee2:vsl1:Xe2:ysli3eee4:prevd4:prevd4:prevd4:prevd4:lastd2:xsli1ee2:vsl1:Xe2:ysli0eee4:prevd4:prevd4:prevd4:lastd2:xsli0ee2:vsl1:Oe2:ysli0eee4:prevd4:prevd4:prevd\"4:lastd2:xsli1ee2:vsl1:Xe2:ysli1eee4:prevd4:lastd2:xsli2ee2:vsl1:Oe2:ysli2eee4:prevd4:prevd4:prevd4:prevd4:lastd2:xsli2ee2:vsl1:Oe2:ysli4eee4:prevd4:prevd4:lastd2:xsli3ee2:vsl1:Oe2:ysli1eee4:prevd4:prevd4:lastd2:xsli2ee2:vsl1:Oe2:ysli1eee4:prevd4:lastd2:xsli2ee2:vsl1:Xe2:ysli1eeeee4:lastd2:xsli0ee2:vsl1:Xe2:ysli3eeeee4:lastd2:xsli1ee2:vsl1:Xe2:ysli4eeeee4:lastd2:xsli1ee2:vsl1:Xe2:ysli2eeee4:lastd2:xsli4ee2:vsl1:Oe2:ysli1eeee4:lastd2:xsli0ee2:vsl1:Xe2:ysli4eeeeee4:lastd2:xsli4ee2:vsl1:Oe2:ysli4eeee4:lastd2:xsli2ee2:vsl1:Xe2:ysli0eeeee4:lastd2:xsli2ee2:vsl1:Xe2:ysli3eeee4:lastd2:xsli3ee2:vsl1:Oe2:ysli2eeeee4:lastd2:xsli1ee2:vsl1:Oe2:ysli3eeee4:lastd2:xsli0ee2:vsl1:Xe2:ysli2eeee4:lastd2:xsli3ee2:vsl1:Oe2:ysli4eeeee4:lastd2:xsli4ee2:vsl1:Oe2:ysli0eeee4:lastd2:xsli4ee2:vsl1:Xe2:ysli2eeeee4:lastd2:xsli0ee2:vsl1:Xe2:ysli1eeee4:lastd2:xsli3ee2:vsl1:Oe2:ysli0eeee"
 
 message' :: String
-message' = "d4:lastd2:ysli2ee2:vsl1:Oe2:xsli0eee4:prevd4:prevd4:prevd4:lastd2:ysli0ee2:vsl1:Xe2:xsli1eee4:prevd4:prevd4:prevd4:prevd4:lastd2:ysli1ee2:vsl1:Xe2:xsli1eeee4:lastd2:ysli1ee2:vsl1:Oe2:xsli2eeee4:lastd2:ysli0ee2:vsl1:Xe2:xsli2eeee4:lastd2:ysli1ee2:vsl1:Oe2:xsli0eeeee4:lastd2:ysli0ee2:vsl1:Oe2:xsli0eeee4:lastd2:ysli2ee2:vsl1:Xe2:xsli2eeeee"
+message' = "d4:prevd4:prevd4:lastd2:xsli3ee2:vsl1:Oe2:ysli3eee4:prevd4:prevd4:prevd4:lastd2:xsli4ee2:vsl1:Xe2:ysli3eee4:prevd4:prevd4:prevd4:prevd4:lastd2:xsli1ee2:vsl1:Xe2:ysli0eee4:prevd4:prevd4:prevd4:lastd2:xsli0ee2:vsl1:Oe2:ysli0eee4:prevd4:prevd4:prevd4:lastd2:xsli1ee2:vsl1:Xe2:ysli1eee4:prevd4:lastd2:xsli2ee2:vsl1:Oe2:ysli2eee4:prevd4:prevd4:prevd4:prevd4:lastd2:xsli2ee2:vsl1:Oe2:ysli4eee4:prevd4:prevd4:lastd2:xsli3ee2:vsl1:Oe2:ysli1eee4:prevd4:prevd4:lastd2:xsli2ee2:vsl1:Oe2:ysli1eee4:prevd4:lastd2:xsli2ee2:vsl1:Xe2:ysli1eeeee4:lastd2:xsli0ee2:vsl1:Xe2:ysli3eeeee4:lastd2:xsli1ee2:vsl1:Xe2:ysli4eeeee4:lastd2:xsli1ee2:vsl1:Xe2:ysli2eeee4:lastd2:xsli4ee2:vsl1:Oe2:ysli1eeee4:lastd2:xsli0ee2:vsl1:Xe2:ysli4eeeeee4:lastd2:xsli4ee2:vsl1:Oe2:ysli4eeee4:lastd2:xsli2ee2:vsl1:Xe2:ysli0eeeee4:lastd2:xsli2ee2:vsl1:Xe2:ysli3eeee4:lastd2:xsli3ee2:vsl1:Oe2:ysli2eeeee4:lastd2:xsli1ee2:vsl1:Oe2:ysli3eeee4:lastd2:xsli0ee2:vsl1:Xe2:ysli2eeee4:lastd2:xsli3ee2:vsl1:Oe2:ysli4eeeee4:lastd2:xsli4ee2:vsl1:Oe2:ysli0eeee4:lastd2:xsli4ee2:vsl1:Xe2:ysli2eeeee4:lastd2:xsli0ee2:vsl1:Xe2:ysli1eeee4:lastd2:xsli3ee2:vsl1:Oe2:ysli0eeee"
 
 type To = [[(Int, Char)]]
 
 expectedParse :: Either String JsonLikeValue
-expectedParse = Right $ JLMap [("last", JLMap [("ys", JLArray [JLInt 2]), ("vs", JLArray [JLString "O"]), ("xs", JLArray [JLInt 0])]), ("prev", JLMap [("prev", JLMap [("prev", JLMap [("last", JLMap [("ys", JLArray [JLInt 0]), ("vs", JLArray [JLString "X"]), ("xs", JLArray [JLInt 1])]), ("prev", JLMap [("prev", JLMap [("prev", JLMap [("prev", JLMap [("last", JLMap [("ys", JLArray [JLInt 1]), ("vs", JLArray [JLString "X"]), ("xs", JLArray [JLInt 1])])]), ("last", JLMap [("ys", JLArray [JLInt 1]), ("vs", JLArray [JLString "O"]), ("xs", JLArray [JLInt 2])])]), ("last", JLMap [("ys", JLArray [JLInt 0]), ("vs", JLArray [JLString "X"]), ("xs", JLArray [JLInt 2])])]), ("last", JLMap [("ys", JLArray [JLInt 1]), ("vs", JLArray [JLString "O"]), ("xs", JLArray [JLInt 0])])])]), ("last", JLMap [("ys", JLArray [JLInt 0]), ("vs", JLArray [JLString "O"]), ("xs", JLArray [JLInt 0])])]), ("last", JLMap [("ys", JLArray [JLInt 2]), ("vs", JLArray [JLString "X"]), ("xs", JLArray [JLInt 2])])])]
+expectedParse = Left "Error at position 247. But, dear students, please make your error more informative"
 
 expectedConvert :: Either InvalidState To
-expectedConvert = Left Order
+expectedConvert = Left Duplicates
