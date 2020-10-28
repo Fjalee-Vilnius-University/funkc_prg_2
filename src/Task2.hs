@@ -10,33 +10,33 @@ import Task2Message
 --         Right (b, "") -> Right b
 --         Right (b, _) -> Left "Some values are outside of map"
 
--- parseJLMap :: (String, Int) -> Either String (JsonLikeValue, String)
--- parseJLMap (('d':t), errPos) = 
---     case parseAllMapedJLValues t of
---         Left a -> Left a
---         Right (mapBody, rest) -> Right (mapBody, rest)
--- parseJLMap (_, errPos) = Left "Error, map has to start with a 'd'"
+parseJLMap :: (String, Int) -> Either String (JsonLikeValue, String, Int)
+parseJLMap (('d':t), errPos) = 
+    case parseAllMapedJLValues (t, errPos) of
+        Left a -> Left a
+        Right (mapBody, rest, errPos) -> Right (mapBody, rest, errPos)
+parseJLMap (_, errPos) = Left ("Error around character " ++ show errPos ++ ", map has to start with a 'd'")
 
--- parseAllMapedJLValues :: (String, Int) -> Either String (JsonLikeValue, String)
--- parseAllMapedJLValues (('e':t), errPos) = Right (JLMap [], t)
--- parseAllMapedJLValues (str, errPos) =
---     case parseMapedJLValue str of
---         Left a -> Left a
---         Right ((key, value), rest) ->
---             case parseAllMapedJLValues rest of
---                 Left a -> Left a
---                 Right (JLMap acc, rest1) -> Right $ (JLMap ([(key, value)] ++ acc), rest1)
--- parseAllMapedJLValues ([], errPos) = Left "Error, JLMap has to end with an 'e'"
+parseAllMapedJLValues :: (String, Int) -> Either String (JsonLikeValue, String, Int)
+parseAllMapedJLValues (('e':t), errPos) = Right (JLMap [], t, errPos)
+parseAllMapedJLValues (str, errPos) =
+    case parseMapedJLValue (str, errPos) of
+        Left a -> Left a
+        Right ((key, value), rest, errPos) ->
+            case parseAllMapedJLValues (rest, errPos) of
+                Left a -> Left a
+                Right (JLMap acc, rest1, errPos) -> Right $ (JLMap ([(key, value)] ++ acc), rest1, errPos)
+parseAllMapedJLValues ([], errPos) = Left ("Error around character " ++ show errPos ++ ", JLMap has to end with an 'e'")
 
--- parseMapedJLValue :: (String, Int) -> Either String ((String, JsonLikeValue), String)
--- parseMapedJLValue (str, errPos) = 
---     case parseString str of
---         Left a -> Left a
---         Right (key, rest) ->
---             case parseJLValue rest of
---                 Left a -> Left a
---                 Right (value, rest') -> Right ((key, value), rest')
--- parseMapedJLValue ([], errPos) = Left "Empty maped JLValue"
+parseMapedJLValue :: (String, Int) -> Either String ((String, JsonLikeValue), String, Int)
+parseMapedJLValue (str, errPos) = 
+    case parseString (str, errPos) of
+        Left a -> Left a
+        Right (key, rest, errPos) ->
+            case parseJLValue (rest, errPos) of
+                Left a -> Left a
+                Right (value, rest', errPos) -> Right ((key, value), rest', errPos)
+parseMapedJLValue ([], errPos) = Left ("Error around character " ++ show errPos ++ ", Empty maped JLValue")
 
 parseJLValue :: (String, Int) -> Either String (JsonLikeValue, String, Int)
 parseJLValue (('d':t), errPos) =
