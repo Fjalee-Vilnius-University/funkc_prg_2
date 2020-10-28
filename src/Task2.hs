@@ -67,17 +67,21 @@ parseJLInt ('i':t) =
                 _ -> error "Invalid integer"
 parseJLInt _ = error "Not an integer"
 
-parseJLString :: String -> (JsonLikeValue, String)
+parseJLString :: String -> Either String (JsonLikeValue, String)
 parseJLString str =
     let
-       strLen = 
-            L.takeWhile C.isDigit str
-       postfix = L.drop (length strLen) str
+        strLen = if C.isDigit $ head str
+            then L.takeWhile C.isDigit str
+            else "not declared"
+        postfix = L.drop (length strLen) str
     in
-       case postfix of
-           (':':r) -> (JLString (L.take (read strLen) r), L.drop (read strLen) r)
-           _ -> error "Invalid string"
-parseJLString _ = error "Not a string"
+        case strLen of 
+            "not declared" -> Left "Length of the string was not declared"
+            _ ->
+                case postfix of
+                (':':r) -> Right (JLString $ L.take (read strLen) r, L.drop (read strLen) r)
+                _ -> Left "Invalid string"
+parseJLString _ = Left "Not a string"
 
 parseString :: String -> Either String (String, String)
 parseString str =
