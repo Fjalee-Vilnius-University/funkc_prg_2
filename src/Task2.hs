@@ -6,27 +6,38 @@ import Task2Message
 --data JsonLikeValue = JLString String | JLInt Int | JLMap [(String, JsonLikeValue)] | JLArray [JsonLikeValue] deriving (Show, Eq)
 
 test :: [Char] -> (JsonLikeValue, String)
-test ('d':t) = undefined
+test ('d':t) = parseJLMap('d':t)
 test ('l':t) = parseJLArray ('l':t)
-test ('e':t) = undefined
 test ('i':t) = parseJLInt ('i':t)
 test (h:t) = 
     if(C.isDigit h)
     then parseJLString (h:t)
     else error "symbol not allowed"
 
+temp :: String -> String
+temp e = e
 
+--tempMessage = "d4:lastd4:prevli2eeee"
 --parseJLMap :: String -> (JsonLikeValue, String)
 parseJLMap ('d':t) = 
     let
-       (name, value) = parseString t
-       (mapInside, rest) = test value
+       (name, body) = parseString t
     in
-        case name of
-           "prev" -> (JLMap[(name, mapInside)], rest)
-           "last" -> (JLMap[(name, mapInside)], rest)
-           _ -> error "Not Map"
-parseJLMap _ = error "Not Map"
+        parseJLMapBody body
+       -- case name of
+        --   "prev" -> (JLMap[(name, mapInside)], newRest)
+        --   "last" -> (JLMap[(name, mapInside)], newRest)
+        --   _ -> error "Not Map"
+parseJLMap _ = error "Not a Map"
+
+parseJLMapBody bodyStr = 
+    let
+       (mapInside, rest) = test bodyStr
+       rest' = if (take 1 rest == "e")
+                then drop 1 rest
+                else 
+    in
+        (JLMap[(name, mapInside)], rest')
 
 parseJLArray :: String -> (JsonLikeValue, String)
 parseJLArray ('l':t) = 
