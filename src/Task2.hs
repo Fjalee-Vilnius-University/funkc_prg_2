@@ -5,49 +5,49 @@ import Task2Message
 
 --data JsonLikeValue = JLString String | JLInt Int | JLMap [(String, JsonLikeValue)] | JLArray [JsonLikeValue] deriving (Show, Eq)
 
-test :: [Char] -> (JsonLikeValue, String)
-test ('d':t) = parseJLMap('d':t)
-test ('l':t) = parseJLArray ('l':t)
-test ('i':t) = parseJLInt ('i':t)
-test (h:t) = 
-    if(C.isDigit h)
-    then parseJLString (h:t)
-    else error "symbol not allowed"
+-- test :: [Char] -> (JsonLikeValue, String)
+-- test ('d':t) = parseJLMap('d':t)
+-- test ('l':t) = parseJLArray ('l':t)
+-- test ('i':t) = parseJLInt ('i':t)
+-- test (h:t) = 
+--     if(C.isDigit h)
+--     then parseJLString (h:t)
+--     else error "symbol not allowed"
 
-temp :: String -> String
-temp e = e
+-- temp :: String -> String
+-- temp e = e
 
---tempMessage = "d4:lastd4:prevli2eeee"
---parseJLMap :: String -> (JsonLikeValue, String)
-parseJLMap ('d':t) = 
-    let
-       (name, body) = parseString t
-    in
-        parseJLMapBody body
-       -- case name of
-        --   "prev" -> (JLMap[(name, mapInside)], newRest)
-        --   "last" -> (JLMap[(name, mapInside)], newRest)
-        --   _ -> error "Not Map"
-parseJLMap _ = error "Not a Map"
+-- --tempMessage = "d4:lastd4:prevli2eeee"
+-- --parseJLMap :: String -> (JsonLikeValue, String)
+-- parseJLMap ('d':t) = 
+--     let
+--        (name, body) = parseString t
+--     in
+--         parseJLMapBody body
+--        -- case name of
+--         --   "prev" -> (JLMap[(name, mapInside)], newRest)
+--         --   "last" -> (JLMap[(name, mapInside)], newRest)
+--         --   _ -> error "Not Map"
+-- parseJLMap _ = error "Not a Map"
 
-parseJLMapBody bodyStr = 
-    let
-       (mapInside, rest) = test bodyStr
-       rest' = if (take 1 rest == "e")
-                then drop 1 rest
-                else 
-    in
-        (JLMap[(name, mapInside)], rest')
+-- parseJLMapBody bodyStr = 
+--     let
+--        (mapInside, rest) = test bodyStr
+--        rest' = if (take 1 rest == "e")
+--                 then drop 1 rest
+--                 else 
+--     in
+--         (JLMap[(name, mapInside)], rest')
 
-parseJLArray :: String -> (JsonLikeValue, String)
-parseJLArray ('l':t) = 
-    let 
-        (value, (fstCh : rest)) = parseJLIntOrString t
-    in
-        case fstCh of
-            'e' -> (JLArray [value], rest)
-            _ -> error "List wasnt ended correctly"
-parseJLArrayTemp _ = error "Not a List" 
+-- parseJLArray :: String -> (JsonLikeValue, String)
+-- parseJLArray ('l':t) = 
+--     let 
+--         (value, (fstCh : rest)) = parseJLIntOrString t
+--     in
+--         case fstCh of
+--             'e' -> (JLArray [value], rest)
+--             _ -> error "List wasnt ended correctly"
+-- parseJLArrayTemp _ = error "Not a List" 
 
 parseJLIntOrString :: String -> (JsonLikeValue, String)
 parseJLIntOrString ('i':t) = parseJLInt ('i':t)
@@ -79,19 +79,21 @@ parseJLString str =
            _ -> error "Invalid string"
 parseJLString _ = error "Not a string"
 
-parseString :: String -> (String, String)
+parseString :: String -> Either String (String, String)
 parseString str =
     let
-       strLen = 
-            L.takeWhile C.isDigit str
-       postfix = L.drop (length strLen) str
+        strLen = if C.isDigit $ head str
+            then L.takeWhile C.isDigit str
+            else "not declared"
+        postfix = L.drop (length strLen) str
     in
-       case postfix of
-           (':':r) -> (L.take (read strLen) r, L.drop (read strLen) r)
-           _ -> error "Invalid string"
-parseString _ = error "Not a string"
-
-
+        case strLen of 
+            "not declared" -> Left "Length of the string was not declared"
+            _ ->
+                case postfix of
+                (':':r) -> Right (L.take (read strLen) r, L.drop (read strLen) r)
+                _ -> Left "Invalid string"
+parseString _ = Left "Not a string"
 
 
 
