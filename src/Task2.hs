@@ -49,23 +49,26 @@ import Task2Message
 --             _ -> error "List wasnt ended correctly"
 -- parseJLArrayTemp _ = error "Not a List" 
 
-parseJLIntOrString :: String -> (JsonLikeValue, String)
-parseJLIntOrString ('i':t) = parseJLInt ('i':t)
-parseJLIntOrString (h:t) =
-    if C.isDigit h
-    then parseJLString (h:t)
-    else error "Not Int or String"
+-- parseJLIntOrString :: String -> (JsonLikeValue, String)
+-- parseJLIntOrString ('i':t) = parseJLInt ('i':t)
+-- parseJLIntOrString (h:t) =
+--     if C.isDigit h
+--     then parseJLString (h:t)
+--     else error "Not Int or String"
 
-parseJLInt :: String -> (JsonLikeValue, String)
+parseJLInt :: String -> Either String (JsonLikeValue, String)
 parseJLInt ('i':t) = 
-    let
-        prefix = L.takeWhile C.isDigit t
-        postfix = L.drop (length prefix) t
-    in
-            case postfix of
-                ('e':r) -> (JLInt (read prefix), r)
-                _ -> error "Invalid integer"
-parseJLInt _ = error "Not an integer"
+        case C.isDigit $ head t of
+            False -> Left "Error, Integer has 0 digits"
+            True ->
+                    let
+                        prefix = L.takeWhile C.isDigit t
+                        postfix = L.drop (length prefix) t
+                    in
+                        case postfix of
+                            ('e':r) -> Right (JLInt (read prefix), r)
+                            _ -> Left "Error, Integer has to end with an 'e'"
+parseJLInt _ = Left "Error, Integer has to start with an 'i'"
 
 parseJLString :: String -> Either String (JsonLikeValue, String)
 parseJLString str =
@@ -76,12 +79,11 @@ parseJLString str =
         postfix = L.drop (length strLen) str
     in
         case strLen of 
-            "not declared" -> Left "Length of the string was not declared"
+            "not declared" -> Left "Error, Length of the string was not declared"
             _ ->
                 case postfix of
                 (':':r) -> Right (JLString $ L.take (read strLen) r, L.drop (read strLen) r)
-                _ -> Left "Invalid string"
-parseJLString _ = Left "Not a string"
+                _ -> Left "Error, Invalid string"
 
 parseString :: String -> Either String (String, String)
 parseString str =
@@ -92,12 +94,11 @@ parseString str =
         postfix = L.drop (length strLen) str
     in
         case strLen of 
-            "not declared" -> Left "Length of the string was not declared"
+            "not declared" -> Left "Error, Length of the string was not declared"
             _ ->
                 case postfix of
                 (':':r) -> Right (L.take (read strLen) r, L.drop (read strLen) r)
-                _ -> Left "Invalid string"
-parseString _ = Left "Not a string"
+                _ -> Left "Error, Invalid string"
 
 
 
