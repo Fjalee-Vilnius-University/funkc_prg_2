@@ -99,21 +99,21 @@ import Task2Message
 -- parseJLInt _ = Left "Error, Integer has to start with an 'i'"
 -- parseJLInt ([], errPos) = Left "Empty Int"
 
--- parseJLString :: (String, Int) -> Either String (JsonLikeValue, String)
--- parseJLString (str, errPos) =
---     let
---         strLen = if C.isDigit $ head str
---             then L.takeWhile C.isDigit str
---             else "not declared"
---         postfix = L.drop (length strLen) str
---     in
---         case strLen of 
---             "not declared" -> Left "Error, Length of the string was not declared"
---             _ ->
---                 case postfix of
---                 (':':r) -> Right (JLString $ L.take (read strLen) r, L.drop (read strLen) r)
---                 _ -> Left "Error, Invalid string"
--- parseJLString ([], errPos) = Left "Empty String"
+parseJLString :: (String, Int) -> Either String (JsonLikeValue, String, Int)
+parseJLString (str, errPos) =
+    let
+        strLen = if C.isDigit $ head str
+            then L.takeWhile C.isDigit str
+            else "not declared"
+        postfix = L.drop (length strLen) str
+    in
+        case strLen of 
+            "not declared" -> Left ("Error around character " ++ show errPos ++ ", Length of the string was not declared")
+            _ ->
+                case postfix of
+                (':':r) -> Right (JLString $ L.take (read strLen) r, L.drop (read strLen) r, errPos + lenDiff str (L.drop (read strLen) r))
+                _ -> Left ("Error around character " ++ show errPos ++ ", Invalid string")
+parseJLString ([], errPos) = Left ("Error around character " ++ show errPos ++ ", Empty String")
 
 parseString :: (String, Int) -> Either String (String, String, Int)
 parseString (str, errPos) =
@@ -127,10 +127,9 @@ parseString (str, errPos) =
             "not declared" -> Left ("Error around character " ++ show errPos ++ ", Length of the string was not declared")
             _ ->
                 case postfix of
-                (':':r) -> Right (L.take (read strLen) r, L.drop (read strLen) r, (errPos + lenDiff str (L.drop (read strLen) r)))
+                (':':r) -> Right (L.take (read strLen) r, L.drop (read strLen) r, errPos + lenDiff str (L.drop (read strLen) r))
                 _ -> Left ("Error around character " ++ show errPos ++ ", Invalid string")
 parseString ([], errPos) = Left ("Error around character " ++ show errPos ++ ", Empty String")
--- (errPos + length strLen + 1 + read strLen)
 
 lenDiff :: String -> String -> Int
 lenDiff str1 str2 = (length str1) - (length str2)
