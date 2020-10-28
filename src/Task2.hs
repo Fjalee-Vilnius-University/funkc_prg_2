@@ -5,48 +5,54 @@ import Task2Message
 
 --data JsonLikeValue = JLString String | JLInt Int | JLMap [(String, JsonLikeValue)] | JLArray [JsonLikeValue] deriving (Show, Eq)
 
--- test :: [Char] -> (JsonLikeValue, String)
--- test ('d':t) = parseJLMap('d':t)
--- test ('l':t) = parseJLArray ('l':t)
--- test ('i':t) = parseJLInt ('i':t)
--- test (h:t) = 
---     if(C.isDigit h)
---     then parseJLString (h:t)
---     else error "symbol not allowed"
-
--- temp :: String -> String
--- temp e = e
-
--- --tempMessage = "d4:lastd4:prevli2eeee"
--- --parseJLMap :: String -> (JsonLikeValue, String)
+-- parseJLMap :: String -> Either String (JsonLikeValue, String)
 -- parseJLMap ('d':t) = 
---     let
---        (name, body) = parseString t
---     in
---         parseJLMapBody body
---        -- case name of
---         --   "prev" -> (JLMap[(name, mapInside)], newRest)
---         --   "last" -> (JLMap[(name, mapInside)], newRest)
---         --   _ -> error "Not Map"
--- parseJLMap _ = error "Not a Map"
+--         case parseString t of
+--             Left a -> Left a
+--             Right (key, rest) ->
+--                 parseJLMapBody rest
+--             -- case name of
+--                 --   "prev" -> (JLMap[(name, mapInside)], newRest)
+--                 --   "last" -> (JLMap[(name, mapInside)], newRest)
+--                 --   _ -> error "Not Map"
+-- parseJLMap _ = Left "Error, map has to start with a 'd'"
 
+--d2:ysli2ee2:vsl1:Oe2:xsli0eee4:prevd4:prevd4:prevd4:lastd2:ysli0ee2:vsl1:Xe2:xsli1eee4:prevd4:prevd4:prevd4:prevd4:lastd2:ysli1ee2:vsl1:Xe2:xsli1eeee4:lastd2:ysli1ee2:vsl1:Oe2:xsli2eeee4:lastd2:ysli0ee2:vsl1:Xe2:xsli2eeee4:lastd2:ysli1ee2:vsl1:Oe2:xsli0eeeee4:lastd2:ysli0ee2:vsl1:Oe2:xsli0eeee4:lastd2:ysli2ee2:vsl1:Xe2:xsli2eeeee"
 -- parseJLMapBody bodyStr = 
 --     let
---        (mapInside, rest) = test bodyStr
+--        (mapInside, rest) = parseJLValue bodyStr
 --        rest' = if (take 1 rest == "e")
 --                 then drop 1 rest
 --                 else 
 --     in
 --         (JLMap[(name, mapInside)], rest')
 
+-- parseJLValue :: [Char] -> Either String (JsonLikeValue, String)
+-- parseJLValue ('d':t) = Right parseJLMap('d':t)
+-- parseJLValue ('l':t) = Right parseJLArrayOfOneIntOrString ('l':t)
+-- parseJLValue ('i':t) = Right parseJLInt ('i':t)
+-- parseJLValue (h:t) = 
+--     if(C.isDigit h)
+--     then Right parseJLString (h:t)
+--     else Left "Error, value isn't JsonLikeValue"
+
+parseMapedJLInt :: String -> Either String ((String, JsonLikeValue), String)
+parseMapedJLInt str = 
+    case parseString str of
+        Left a -> Left a
+        Right (key, rest) ->
+            case parseJLInt rest of
+                Left a -> Left a
+                Right (value, rest') -> Right ((key, value), rest')
+
 parseJLArrayOfOneIntOrString :: String -> Either String (JsonLikeValue, String)
 parseJLArrayOfOneIntOrString ('l':t) = 
-        case parseJLIntOrString t of
-            Left a -> Left a
-            Right (value, (fstCh : rest)) ->
-                case fstCh of
-                    'e' -> Right (JLArray [value], rest)
-                    _ -> Left "Error, one element list has to end with an 'e' after first element in the array"
+    case parseJLIntOrString t of
+        Left a -> Left a
+        Right (value, (fstCh : rest)) ->
+            case fstCh of
+                'e' -> Right (JLArray [value], rest)
+                _ -> Left "Error, one element list has to end with an 'e' after first element in the array"
 parseJLArrayOfOneIntOrString _ = Left "Error, list has to start with an 'l'"
 
 parseJLIntOrString :: String -> Either String (JsonLikeValue, String)
