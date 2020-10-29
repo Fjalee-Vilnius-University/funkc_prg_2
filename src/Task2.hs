@@ -177,7 +177,16 @@ lenDiff str1 str2 = (length str1) - (length str2)
 --convert $ parse size message'
 convert a = case a of
     Right wholeMap -> 
-        getAllTurns wholeMap ([], [], [])
+        case getAllTurns wholeMap ([], [], []) of
+            Left a -> Left a
+            --Right allTurns -> test allTurns
+
+
+--test (xsArr, ysArr, vsArr) = 
+
+createEmptyLILArr :: Int -> [[(Int, Char)]] -> [[(Int, Char)]]
+createEmptyLILArr 0 arr = arr
+createEmptyLILArr size arr = createEmptyLILArr (size-1) (arr ++ [[]])
 
 getAllTurns :: JsonLikeValue -> ([Int], [Int], [Char]) -> Either String ([Int], [Int], [Char])
 getAllTurns wholeMap allTurns = 
