@@ -184,12 +184,42 @@ convert a = case a of
 test wholeMap = 
     case mapFind wholeMap "last" of
         Nothing -> error "Nothing" -- fix
-        Just lstLast -> 
-            case delFromMap wholeMap ("last", lstLast) of
-                JLMap (h:t) -> test $ snd h
-                JLMap [] -> error "Conversion done"
+        Just lstLast -> lstLast
+            -- case delFromMap wholeMap ("last", lstLast) of
+            --     JLMap (h:t) -> test $ snd h
+            --     JLMap [] -> error "Conversion done"
 
-test2 = test $ test $ test $ test $ test $ test $ test $ test $ convert $ parse size message'
+addTurn :: JsonLikeValue -> ([Int],[Int],[Char]) -> ([Int],[Int],[Char])
+addTurn turn (xsArr,ysArr,vsArr) = 
+    case turn of
+        JLMap [] -> (xsArr,ysArr,vsArr)
+        JLMap turnArr -> 
+            case fst (head turnArr) of
+                "xs" -> 
+                    let
+                        parsedInt = parseJLArrayToInt $ snd $ head turnArr
+                    in
+                        addTurn (JLMap (tail turnArr)) (xsArr ++ [parsedInt], ysArr, vsArr)
+                "ys" -> 
+                    let
+                        parsedInt = parseJLArrayToInt $ snd $ head turnArr
+                    in
+                        addTurn (JLMap (tail turnArr)) (xsArr, ysArr ++ [parsedInt], vsArr)
+                "vs" -> 
+                    let
+                        parsedStr = parseJLArrayToString $ snd $ head turnArr
+                    in
+                        addTurn (JLMap (tail turnArr)) (xsArr, ysArr, vsArr ++ parsedStr)
+
+parseJLArrayToInt :: JsonLikeValue -> Int
+parseJLArrayToInt arr =
+    case arr of
+        JLArray [JLInt a] -> a
+
+parseJLArrayToString :: JsonLikeValue -> String
+parseJLArrayToString arr =
+    case arr of
+        JLArray [JLString a] -> a
 
 delFromMap :: JsonLikeValue -> (String, JsonLikeValue) -> JsonLikeValue
 delFromMap wholeMap itemDel = 
