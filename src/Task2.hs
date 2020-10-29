@@ -179,9 +179,7 @@ convert a = case a of
     Right wholeMap -> 
         getAllTurns wholeMap ([], [], [])
 
---test :: Either String JsonLikeValue -> Maybe JsonLikeValue
---test :: JsonLikeValue -> JsonLikeValue
-getAllTurns :: JsonLikeValue -> ([Int], [Int], [Char]) -> ([Int], [Int], [Char])
+getAllTurns :: JsonLikeValue -> ([Int], [Int], [Char]) -> Either String ([Int], [Int], [Char])
 getAllTurns wholeMap allTurns = 
     case mapFind wholeMap "last" of
         Nothing -> error "Nothing" -- fix
@@ -189,9 +187,20 @@ getAllTurns wholeMap allTurns =
             let
                 allTurns' = addTurn lstLast allTurns
             in
-                case delFromMap wholeMap ("last", lstLast) of
-                    JLMap (h:t) -> getAllTurns (snd h) allTurns'
-                    JLMap [] -> allTurns'
+                case isCorrOrder allTurns' of 
+                    False -> Left "Order"
+                    True ->
+                        case delFromMap wholeMap ("last", lstLast) of
+                            JLMap (h:t) -> getAllTurns (snd h) allTurns'
+                            JLMap [] -> Right allTurns'
+
+isCorrOrder :: ([Int], [Int], [Char]) -> Bool
+isCorrOrder (_, _, []) = True
+isCorrOrder (_, _, (_:[])) = True
+isCorrOrder (_, _, vsArr) = 
+    if head (reverse vsArr) == head (drop 1 (reverse vsArr))
+    then False
+    else True
 
 addTurn :: JsonLikeValue -> ([Int],[Int],[Char]) -> ([Int],[Int],[Char])
 addTurn turn (xsArr,ysArr,vsArr) = 
