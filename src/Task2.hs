@@ -177,17 +177,21 @@ lenDiff str1 str2 = (length str1) - (length str2)
 --convert $ parse size message'
 convert a = case a of
     Right wholeMap -> 
-        test wholeMap
+        getAllTurns wholeMap ([], [], [])
 
 --test :: Either String JsonLikeValue -> Maybe JsonLikeValue
 --test :: JsonLikeValue -> JsonLikeValue
-test wholeMap = 
+getAllTurns :: JsonLikeValue -> ([Int], [Int], [Char]) -> ([Int], [Int], [Char])
+getAllTurns wholeMap allTurns = 
     case mapFind wholeMap "last" of
         Nothing -> error "Nothing" -- fix
-        Just lstLast -> lstLast
-            -- case delFromMap wholeMap ("last", lstLast) of
-            --     JLMap (h:t) -> test $ snd h
-            --     JLMap [] -> error "Conversion done"
+        Just lstLast -> 
+            let
+                allTurns' = addTurn lstLast allTurns
+            in
+                case delFromMap wholeMap ("last", lstLast) of
+                    JLMap (h:t) -> getAllTurns (snd h) allTurns'
+                    JLMap [] -> allTurns'
 
 addTurn :: JsonLikeValue -> ([Int],[Int],[Char]) -> ([Int],[Int],[Char])
 addTurn turn (xsArr,ysArr,vsArr) = 
