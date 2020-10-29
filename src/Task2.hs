@@ -3,8 +3,18 @@ import Data.List as L
 import Data.Char as C
 import Task2Message
 
+parseTest :: Bool
+parseTest = 
+    case (parse size message, expectedParse) of
+        (Right m, Right e) -> m == e
+        (Left _, Left _) -> True
+        _ -> False
+convertTest :: Bool
+convertTest = convert size (either error id (parse size message')) == expectedConvert
+
+--case (parse size message, expectedParse) of (Right m, Right e) -> m == e (Left _, Left _) -> True _ -> False
 parse :: Int -> String -> Either String JsonLikeValue
-parse size str = 
+parse _ str = 
     case parseJLMap str str of
         Left a -> Left a
         Right (b, "") -> Right b
@@ -174,34 +184,74 @@ lenDiff str1 str2 = (length str1) - (length str2)
 
 --------------------------------------------------------------------------------------------------------------------------------
 
---convert $ parse size message'
-convert a = case a of
-    Right wholeMap -> 
-        case getAllTurns wholeMap ([], [], []) of
+
+--convert size (either error id (parse size message')) == expectedConvert
+convert :: Int -> JsonLikeValue -> Either InvalidState To
+convert size wholeMap =
+    case getallTurnsArr wholeMap ([], [], []) of
+        Left a -> Left a
+        Right allTurnsArr -> parseArrToLIL allTurnsArr (createEmptyLILArr size [])
+
+parseArrToLIL :: ([Int], [Int], [Char]) -> [[(Int, Char)]] -> Either InvalidState [[(Int, Char)]]
+parseArrToLIL ([], [], []) lilArr = Right lilArr
+parseArrToLIL (xsArr, ysArr, vsArr) lilArr = 
+    let
+        ythArr = lilArr !! head ysArr
+        newMove = (head xsArr, head vsArr)
+    in 
+        case addMoveToArr ythArr newMove of
             Left a -> Left a
-            --Right allTurns -> test allTurns
+            Right a -> parseArrToLIL (tail xsArr, tail ysArr, tail vsArr) (replace a (head ysArr) lilArr)
 
+addMoveToArr :: [(Int, Char)] -> (Int, Char) -> Either InvalidState [(Int, Char)]
+addMoveToArr allMovesArr (x, v) = 
+    case findPosToInsert allMovesArr x 0 of
+        Left a -> Left a
+        Right pos -> Right $ insertAt (x,v) pos allMovesArr
 
---test (xsArr, ysArr, vsArr) = 
+findPosToInsert :: [(Int, Char)] -> Int -> Int -> Either InvalidState Int
+findPosToInsert [] _ _ = Right 0
+findPosToInsert arr cord ptr = 
+    if ((length arr) - 1 < ptr)
+    then Right (ptr)
+    else
+        if (fst (arr !! ptr)) == cord
+        then Left Duplicates
+        else
+            if (fst (arr !! ptr)) > cord
+            then Right (ptr)
+            else 
+                case findPosToInsert arr cord (ptr+1) of
+                    Left a -> Left a
+                    Right a -> Right a
+
+insertAt :: a -> Int -> [a] -> [a]
+insertAt newEl _ [] = [newEl]
+insertAt newEl 0 arr = (newEl:arr)
+insertAt newEl i (a:arr) = (a : insertAt newEl (i - 1) arr)
+
+replace :: a -> Int -> [a] -> [a]
+replace newEl 0 arr = newEl: (tail arr)
+replace newEl i (a:arr) = (a : replace newEl (i-1) arr)
 
 createEmptyLILArr :: Int -> [[(Int, Char)]] -> [[(Int, Char)]]
 createEmptyLILArr 0 arr = arr
 createEmptyLILArr size arr = createEmptyLILArr (size-1) (arr ++ [[]])
 
-getAllTurns :: JsonLikeValue -> ([Int], [Int], [Char]) -> Either String ([Int], [Int], [Char])
-getAllTurns wholeMap allTurns = 
+getallTurnsArr :: JsonLikeValue -> ([Int], [Int], [Char]) -> Either InvalidState ([Int], [Int], [Char])
+getallTurnsArr wholeMap allTurnsArr = 
     case mapFind wholeMap "last" of
         Nothing -> error "Nothing" -- fix
         Just lstLast -> 
             let
-                allTurns' = addTurn lstLast allTurns
+                allTurnsArr' = addTurn lstLast allTurnsArr
             in
-                case isCorrOrder allTurns' of 
-                    False -> Left "Order"
+                case isCorrOrder allTurnsArr' of 
+                    False -> Left Order
                     True ->
                         case delFromMap wholeMap ("last", lstLast) of
-                            JLMap (h:t) -> getAllTurns (snd h) allTurns'
-                            JLMap [] -> Right allTurns'
+                            JLMap (h:_) -> getallTurnsArr (snd h) allTurnsArr'
+                            JLMap [] -> Right allTurnsArr'
 
 isCorrOrder :: ([Int], [Int], [Char]) -> Bool
 isCorrOrder (_, _, []) = True
