@@ -174,13 +174,22 @@ lenDiff str1 str2 = (length str1) - (length str2)
 
 --------------------------------------------------------------------------------------------------------------------------------
 
---test :: Either String JsonLikeValue -> Maybe JsonLikeValue
-test a = case a of
+--convert $ parse size message'
+convert a = case a of
     Right wholeMap -> 
-        case mapFind wholeMap "last" of
-            Nothing -> error "Nothing" -- fix
-            Just lstLast -> 
-                delFromMap wholeMap ("last", lstLast)
+        test wholeMap
+
+--test :: Either String JsonLikeValue -> Maybe JsonLikeValue
+--test :: JsonLikeValue -> JsonLikeValue
+test wholeMap = 
+    case mapFind wholeMap "last" of
+        Nothing -> error "Nothing" -- fix
+        Just lstLast -> 
+            case delFromMap wholeMap ("last", lstLast) of
+                JLMap (h:t) -> test $ snd h
+                JLMap [] -> error "Conversion done"
+
+test2 = test $ test $ test $ test $ test $ test $ test $ test $ convert $ parse size message'
 
 delFromMap :: JsonLikeValue -> (String, JsonLikeValue) -> JsonLikeValue
 delFromMap wholeMap itemDel = 

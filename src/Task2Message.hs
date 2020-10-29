@@ -1,13 +1,12 @@
 module Task2Message
 where
 
--- ┌         ┐
--- │ O X O O │
--- │ X O X   │
--- │ X X O X │
--- │   O X O │
--- └         ┘
--- seed: 1535842634780406394
+-- ┌       ┐
+-- │ X X X │
+-- │   O O │
+-- │ ? X O │
+-- └       ┘
+-- seed: -7753783528582890193
 -- encoding: Ben
 -- list entry: ARR
 -- convert to: LIL
@@ -16,18 +15,18 @@ data JsonLikeValue = JLString String | JLInt Int | JLMap [(String, JsonLikeValue
 data InvalidState = Order | Duplicates deriving (Show, Eq)
 
 size :: Int
-size = 4
+size = 3
 
 message :: String
-message = "d4:prevd4:lastd2:vsl1:Xe2:xsli0ee2:ysli2eee4:prevd4:lastd2:vsl1:Oe2:xsli0ee2:ysli0eee4:prevd4:prevd4:lastd2:vsl1:Oe2:xsli2ee2:ysli2eee4:prevd4:prevd4:lastd2:vsl1:Oe2:xsli1ee2:ysl\"i3eee4:prevd4:prevd4:lastd2:vsl1:Oe2:xsli3ee2:ysli3eee4:prevd4:prevd4:lastd2:vsl1:Oe2:xsli3ee2:ysli0eee4:prevd4:lastd2:vsl1:Xe2:xsli3ee2:ysli2eee4:prevd4:prevd4:lastd2:vsl1:Xe2:xsli0ee2:ysli1eeee4:lastd2:vsl1:Oe2:xsli2ee2:ysli0eeeeee4:lastd2:vsl1:Xe2:xsli1ee2:ysli0eeeee4:lastd2:vsl1:Xe2:xsli2ee2:ysli3eeeee4:lastd2:vsl1:Xe2:xsli1ee2:ysli2eeeee4:lastd2:vsl1:Xe2:xsli2ee2:ysli1eeeeee4:lastd2:vsl1:Oe2:xsli1ee2:ysli1eeee"
+message = "d4:lastd2:ysli0ee2:vsl1:Xe2:xsli2eee4:prevd4:lastd2:ysli1ee2:vsl1:Oe2:xsli1eee4:prevd4:prevd4:lastd2:ysli2ee2:vsl1:Oe2:xsli2eee4:prevd4:prevd4:lastd2:ysli1ee2:vsl1:Oe2:xsli2eee4:prevd4:lastd2:ysli0ee2:vsl1:Xe2:xsli0eee4:prevd4:lastd2:ysli2ee2:vsl1:Oe2:xsli0eee4:prevd4:lastd2:ysli2ee2:vsl1:Xe2:xsli0eeeeeee4:lastd2:ysli2ee2:vsl1:Xe2:xsli1eeeee4:lastd2:ysli0ee2:vsl1:Xe2:xsli1eeeeee"
 
 message' :: String
-message' = "d4:prevd4:lastd2:vsl1:Xe2:xsli0ee2:ysli2eee4:prevd4:lastd2:vsl1:Oe2:xsli0ee2:ysli0eee4:prevd4:prevd4:lastd2:vsl1:Oe2:xsli2ee2:ysli2eee4:prevd4:prevd4:lastd2:vsl1:Oe2:xsli1ee2:ysli3eee4:prevd4:prevd4:lastd2:vsl1:Oe2:xsli3ee2:ysli3eee4:prevd4:prevd4:lastd2:vsl1:Oe2:xsli3ee2:ysli0eee4:prevd4:lastd2:vsl1:Xe2:xsli3ee2:ysli2eee4:prevd4:prevd4:lastd2:vsl1:Xe2:xsli0ee2:ysli1eeee4:lastd2:vsl1:Oe2:xsli2ee2:ysli0eeeeee4:lastd2:vsl1:Xe2:xsli1ee2:ysli0eeeee4:lastd2:vsl1:Xe2:xsli2ee2:ysli3eeeee4:lastd2:vsl1:Xe2:xsli1ee2:ysli2eeeee4:lastd2:vsl1:Xe2:xsli2ee2:ysli1eeeeee4:lastd2:vsl1:Oe2:xsli1ee2:ysli1eeee"
+message' = "d4:lastd2:ysli0ee2:vsl1:Xe2:xsli2eee4:prevd4:lastd2:ysli1ee2:vsl1:Oe2:xsli1eee4:prevd4:prevd4:lastd2:ysli2ee2:vsl1:Oe2:xsli2eee4:prevd4:prevd4:lastd2:ysli1ee2:vsl1:Oe2:xsli2eee4:prevd4:lastd2:ysli0ee2:vsl1:Xe2:xsli0eee4:prevd4:lastd2:ysli2ee2:vsl1:Oe2:xsli0eee4:prevd4:lastd2:ysli2ee2:vsl1:Xe2:xsli0eeeeeee4:lastd2:ysli2ee2:vsl1:Xe2:xsli1eeeee4:lastd2:ysli0ee2:vsl1:Xe2:xsli1eeeeee"
 
 type To = [[(Int, Char)]]
 
 expectedParse :: Either String JsonLikeValue
-expectedParse = Left "Error at position 179. But, dear students, please make your error more informative"
+expectedParse = Right $ JLMap [("last", JLMap [("ys", JLArray [JLInt 0]), ("vs", JLArray [JLString "X"]), ("xs", JLArray [JLInt 2])]), ("prev", JLMap [("last", JLMap [("ys", JLArray [JLInt 1]), ("vs", JLArray [JLString "O"]), ("xs", JLArray [JLInt 1])]), ("prev", JLMap [("prev", JLMap [("last", JLMap [("ys", JLArray [JLInt 2]), ("vs", JLArray [JLString "O"]), ("xs", JLArray [JLInt 2])]), ("prev", JLMap [("prev", JLMap [("last", JLMap [("ys", JLArray [JLInt 1]), ("vs", JLArray [JLString "O"]), ("xs", JLArray [JLInt 2])]), ("prev", JLMap [("last", JLMap [("ys", JLArray [JLInt 0]), ("vs", JLArray [JLString "X"]), ("xs", JLArray [JLInt 0])]), ("prev", JLMap [("last", JLMap [("ys", JLArray [JLInt 2]), ("vs", JLArray [JLString "O"]), ("xs", JLArray [JLInt 0])]), ("prev", JLMap [("last", JLMap [("ys", JLArray [JLInt 2]), ("vs", JLArray [JLString "X"]), ("xs", JLArray [JLInt 0])])])])])]), ("last", JLMap [("ys", JLArray [JLInt 2]), ("vs", JLArray [JLString "X"]), ("xs", JLArray [JLInt 1])])])]), ("last", JLMap [("ys", JLArray [JLInt 0]), ("vs", JLArray [JLString "X"]), ("xs", JLArray [JLInt 1])])])])]
 
 expectedConvert :: Either InvalidState To
-expectedConvert = Right [[(0, 'O'), (1, 'X'), (2, 'O'), (3, 'O')], [(0, 'X'), (1, 'O'), (2, 'X')], [(0, 'X'), (1, 'X'), (2, 'O'), (3, 'X')], [(1, 'O'), (2, 'X'), (3, 'O')]]
+expectedConvert = Left Duplicates
