@@ -30,7 +30,7 @@ parseJLMap dnStartD orgStr = Left ("Error around character " ++ show errPos ++ "
         errPos = lenDiff orgStr dnStartD
 
 parseAllMapedJLValues :: String -> String -> Either String (JsonLikeValue, String)
-parseAllMapedJLValues ('e':t) orgStr = Right (JLMap [], t)
+parseAllMapedJLValues ('e':t) _ = Right (JLMap [], t)
 parseAllMapedJLValues str orgStr =
     case parseMapedJLValue str orgStr of
         Left a -> Left a
@@ -38,9 +38,6 @@ parseAllMapedJLValues str orgStr =
             case parseAllMapedJLValues rest orgStr of
                 Left a -> Left a
                 Right (JLMap acc, rest1) -> Right $ (JLMap ([(key, value)] ++ acc), rest1)
-parseAllMapedJLValues [] orgStr = Left ("Error around character " ++ show errPos ++ ", JLMap has to end with an 'e'")
-    where 
-        errPos = lenDiff orgStr []
 
 parseMapedJLValue :: String -> String -> Either String ((String, JsonLikeValue), String)
 parseMapedJLValue str orgStr = 
@@ -50,9 +47,6 @@ parseMapedJLValue str orgStr =
             case parseJLValue rest orgStr of
                 Left a -> Left a
                 Right (value, rest') -> Right ((key, value), rest')
-parseMapedJLValue [] orgStr = Left ("Error around character " ++ show errPos ++ ", Empty maped JLValue")
-    where
-        errPos = lenDiff orgStr []
 
 parseJLValue :: String -> String -> Either String (JsonLikeValue, String)
 parseJLValue ('d':t) orgStr =
@@ -155,9 +149,6 @@ parseJLString str orgStr =
                 case postfix of
                 (':':r) -> Right (JLString $ L.take (read strLen) r, L.drop (read strLen) r)
                 _ -> Left ("Error around character " ++ show errPos ++ ", Invalid string")
-parseJLString [] orgStr = Left ("Error around character " ++ show errPos ++ ", Empty String")
-    where 
-        errPos = lenDiff orgStr []
 
 parseString :: String -> String -> Either String (String, String)
 parseString str orgStr =
@@ -174,9 +165,6 @@ parseString str orgStr =
                 case postfix of
                 (':':r) -> Right (L.take (read strLen) r, L.drop (read strLen) r)
                 _ -> Left ("Error around character " ++ show errPos ++ ", Invalid string")
-parseString [] orgStr = Left ("Error around character " ++ show errPos ++ ", Empty String")
-    where 
-        errPos = lenDiff orgStr []
 
 lenDiff :: String -> String -> Int
 lenDiff str1 str2 = (length str1) - (length str2)
